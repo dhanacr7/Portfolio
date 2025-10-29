@@ -18,15 +18,24 @@ export const Navigation = () => {
   const [showResumeOptions, setShowResumeOptions] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
+  // Scroll shadow effect
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Open resume PDF in a new tab (and let browser handle download/open)
+  // Click outside to close resume dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".resume-dropdown")) setShowResumeOptions(false);
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  // Open resume PDF in a new tab
   const handleResumeOpen = () => {
-    // This will open file in a new tab. If server returns PDF it will display; user can save.
     window.open("/resume.pdf", "_blank", "noopener,noreferrer");
   };
 
@@ -65,8 +74,8 @@ export const Navigation = () => {
               </motion.a>
             ))}
 
-            {/* Resume Dropdown Trigger */}
-            <div className="relative">
+            {/* Resume Dropdown */}
+            <div className="relative resume-dropdown">
               <Button
                 variant="outline"
                 onClick={() => setShowResumeOptions((p) => !p)}
@@ -80,17 +89,21 @@ export const Navigation = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.12 }}
+                  transition={{ duration: 0.15 }}
                   className="absolute right-0 mt-2 bg-background/95 backdrop-blur-md rounded-lg shadow-lg border border-primary/20 p-2 w-48 z-50"
                 >
+                  {/* View Resume */}
                   <a
-                    href="/resume"
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 transition-all block text-foreground"
                     onClick={() => setShowResumeOptions(false)}
                   >
                     <FileText className="w-4 h-4 text-primary" /> View Resume
                   </a>
 
+                  {/* Download Resume */}
                   <button
                     onClick={() => {
                       setShowResumeOptions(false);
@@ -149,10 +162,12 @@ export const Navigation = () => {
               </a>
             ))}
 
-            {/* Resume Buttons inside Mobile Menu */}
+            {/* Resume Options for Mobile */}
             <div className="flex flex-col gap-2 mt-4">
               <a
-                href="/resume"
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full py-2 text-center cyber-border rounded-md hover:bg-primary/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -169,6 +184,7 @@ export const Navigation = () => {
               </button>
             </div>
 
+            {/* Theme Toggle Mobile */}
             <Button
               onClick={() => {
                 toggleTheme();
