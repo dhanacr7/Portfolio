@@ -3,7 +3,7 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, Smartphone, Database } from 'lucide-react';
+import { ExternalLink, Github, Smartphone, Database, Brain, GraduationCap } from 'lucide-react';
 
 const projects = [
   {
@@ -14,19 +14,41 @@ const projects = [
     icon: Database,
     tags: ['HTML', 'CSS', 'JavaScript', 'Spring Boot', 'MySQL'],
     gradient: 'from-primary to-cyan-600',
-    codeLink: '#', // Placeholder until deployed
-    demoLink: '#', // No live demo yet
+    codeLink: '#',
+    demoLink: '#',
   },
   {
     title: 'KK Cafe App',
     category: 'Mobile Application',
     description:
-      'A Flutter-based mobile app developed for KK Cafe startup. Features include an intuitive user interface, real-time order management, and integration with a Spring Boot backend using PostgreSQL.',
+      'A Flutter-based mobile app developed for KK Cafe startup. Features include an intuitive UI, real-time order management, and Spring Boot backend integration with PostgreSQL.',
     icon: Smartphone,
     tags: ['Flutter', 'Spring Boot', 'PostgreSQL', 'Mobile APK'],
     gradient: 'from-secondary to-purple-600',
-    codeLink: '#', // Placeholder
-    demoLink: '#', // Placeholder
+    codeLink: '#',
+    demoLink: '#',
+  },
+  {
+    title: 'AI Fake Social Media Handle Detector',
+    category: 'AI-Powered Web Application',
+    description:
+      'An intelligent MERN Stack web app that detects fake social media accounts using AI and NLP-based analysis. Integrated with OpenAI APIs and MongoDB for smart pattern detection, ensuring authenticity and digital safety.',
+    icon: Brain,
+    tags: ['MERN Stack', 'AI', 'Machine Learning', 'OpenAI API', 'Cybersecurity'],
+    gradient: 'from-pink-500 to-red-600',
+    codeLink: '#',
+    demoLink: '#',
+  },
+  {
+    title: 'Smart Curriculum System for Higher Education',
+    category: 'AI-Integrated Mobile Application',
+    description:
+      'An innovative EdTech mobile application designed to revolutionize academic management. The system implements a hybrid attendance mechanism using Bluetooth and Facial Recognition for enhanced accuracy. It also includes a personalized student AI dashboard powered by a RAG (Retrieval-Augmented Generation) model, enabling intelligent academic insights. This project was recognized and won the internal round of the Smart India Hackathon (SIH).',
+    icon: GraduationCap,
+    tags: ['Flutter', 'AI', 'Facial Recognition', 'Bluetooth', 'RAG Model', 'SIH 2025'],
+    gradient: 'from-green-500 to-emerald-700',
+    codeLink: '#',
+    demoLink: '#',
   },
 ];
 

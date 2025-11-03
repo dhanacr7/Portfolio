@@ -101,7 +101,7 @@ export const Contact = () => {
                       Github
                     </a>
                     <a
-                      href="https://www.linkedin.com/in/dhanapriyan7"
+                      href="  "
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-2 rounded-lg bg-muted cyber-border hover:bg-primary/20 transition-colors text-sm"
