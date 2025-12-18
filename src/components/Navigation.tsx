@@ -18,24 +18,26 @@ export const Navigation = () => {
   const [showResumeOptions, setShowResumeOptions] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  // Scroll shadow effect
+  /* Scroll shadow */
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Click outside to close resume dropdown
+  /* Close resume dropdown on outside click */
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".resume-dropdown")) setShowResumeOptions(false);
+      if (!e.target.closest(".resume-dropdown")) {
+        setShowResumeOptions(false);
+      }
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Open resume PDF in a new tab
-  const handleResumeOpen = () => {
+  /* Open PDF */
+  const openResumePDF = () => {
     window.open("/resume.pdf", "_blank", "noopener,noreferrer");
   };
 
@@ -47,18 +49,31 @@ export const Navigation = () => {
         isScrolled ? "glass-effect shadow-lg" : ""
       }`}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.div
+          {/* LOGO (FIXED SIZE) */}
+          <motion.a
+            href="/"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-2xl font-bold glow-cyan select-none"
+            className="flex items-center cursor-pointer"
           >
-            &lt;DP /&gt;
-          </motion.div>
+            <img
+              src="/DP_logo.png"
+              alt="DP Logo"
+              className="
+                h-14 md:h-16 
+                w-auto 
+                max-h-16 
+                object-contain 
+                glow-cyan
+                transition-transform duration-300
+                hover:scale-105
+              "
+            />
+          </motion.a>
 
-          {/* Desktop Navigation */}
+          {/* DESKTOP NAV */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
               <motion.a
@@ -66,7 +81,7 @@ export const Navigation = () => {
                 href={item.href}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.08 }}
                 className="text-foreground hover:text-primary transition-colors relative group"
               >
                 {item.name}
@@ -74,12 +89,12 @@ export const Navigation = () => {
               </motion.a>
             ))}
 
-            {/* Resume Dropdown */}
+            {/* RESUME DROPDOWN */}
             <div className="relative resume-dropdown">
               <Button
                 variant="outline"
                 onClick={() => setShowResumeOptions((p) => !p)}
-                className="cyber-border hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2"
+                className="cyber-border flex items-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 Resume
@@ -89,41 +104,39 @@ export const Navigation = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 bg-background/95 backdrop-blur-md rounded-lg shadow-lg border border-primary/20 p-2 w-48 z-50"
+                  className="absolute right-0 mt-2 w-48 rounded-lg border border-primary/20 bg-background/95 backdrop-blur-md shadow-lg p-2 z-50"
                 >
-                  {/* View Resume */}
                   <a
                     href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 transition-all block text-foreground"
                     onClick={() => setShowResumeOptions(false)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 transition"
                   >
-                    <FileText className="w-4 h-4 text-primary" /> View Resume
+                    <FileText className="w-4 h-4 text-primary" />
+                    View Resume
                   </a>
 
-                  {/* Download Resume */}
                   <button
                     onClick={() => {
                       setShowResumeOptions(false);
-                      handleResumeOpen();
+                      openResumePDF();
                     }}
-                    className="flex items-center gap-2 px-3 py-2 w-full rounded-md hover:bg-primary/10 transition-all text-foreground"
+                    className="flex w-full items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 transition"
                   >
-                    <Download className="w-4 h-4 text-primary" /> Download Resume
+                    <Download className="w-4 h-4 text-primary" />
+                    Download Resume
                   </button>
                 </motion.div>
               )}
             </div>
 
-            {/* Theme Toggle */}
+            {/* THEME TOGGLE */}
             <Button
               onClick={toggleTheme}
               variant="ghost"
               size="icon"
-              className="ml-2 p-2 rounded-full hover:bg-primary/20 transition-all"
-              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+              className="rounded-full"
             >
               {theme === "dark" ? (
                 <Sun className="w-5 h-5 text-yellow-400" />
@@ -133,7 +146,7 @@ export const Navigation = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* MOBILE MENU BUTTON */}
           <Button
             variant="ghost"
             size="icon"
@@ -144,7 +157,7 @@ export const Navigation = () => {
           </Button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* MOBILE NAV */}
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -155,36 +168,35 @@ export const Navigation = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="block py-3 text-foreground hover:text-primary transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-3 text-foreground hover:text-primary"
               >
                 {item.name}
               </a>
             ))}
 
-            {/* Resume Options for Mobile */}
             <div className="flex flex-col gap-2 mt-4">
               <a
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full py-2 text-center cyber-border rounded-md hover:bg-primary/10"
                 onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 text-center cyber-border rounded-md"
               >
                 View Resume
               </a>
+
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  handleResumeOpen();
+                  openResumePDF();
                 }}
-                className="block w-full py-2 text-center cyber-border rounded-md hover:bg-primary/10"
+                className="py-2 text-center cyber-border rounded-md"
               >
                 Download Resume
               </button>
             </div>
 
-            {/* Theme Toggle Mobile */}
             <Button
               onClick={() => {
                 toggleTheme();
@@ -192,8 +204,7 @@ export const Navigation = () => {
               }}
               variant="outline"
               size="icon"
-              className="mt-4 p-2 rounded-full"
-              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+              className="mt-4 rounded-full"
             >
               {theme === "dark" ? (
                 <Sun className="w-5 h-5 text-yellow-400" />
