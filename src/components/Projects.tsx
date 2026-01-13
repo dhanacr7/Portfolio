@@ -54,9 +54,9 @@ const projects = [
     title: 'Smart Curriculum System for Higher Education',
     category: 'AI-Integrated Mobile Application',
     description:
-      'An innovative EdTech mobile application designed to revolutionize academic management. The system implements a hybrid attendance mechanism using Bluetooth and Facial Recognition for enhanced accuracy. It also includes a personalized student AI dashboard powered by a RAG (Retrieval-Augmented Generation) model, enabling intelligent academic insights. This project was recognized and won the internal round of the Smart India Hackathon (SIH).',
+      'A nationally acclaimed EdTech mobile application that revolutionizes academic management. Selected as TOP 7 in India for Smart India Hackathon 2025 Problem Statement 25016 and advanced to the FINAL ROUND of PEC Hacks 3.0 national event. Features a hybrid attendance system combining Bluetooth and Google MediaPipe-powered facial recognition for 99% accuracy. Includes an intelligent student dashboard with RAG-based AI insights, real-time analytics, and seamless integration across Spring Boot and Node.js backend services.',
     icon: GraduationCap,
-    tags: ['Flutter', 'AI', 'Facial Recognition', 'Bluetooth', 'RAG Model', 'SIH 2025'],
+    tags: ['Flutter', 'Spring Boot', 'Node.js', 'Express.js', 'Google MediaPipe', 'AI', 'Facial Recognition', 'Bluetooth', 'RAG Model', 'SIH 2025', 'PEC Hacks 3.0'],
     gradient: 'from-green-500 to-emerald-700',
     codeLink: '#',
     demoLink: '#',

@@ -34,6 +34,42 @@ export const Hero = () => {
             </div>
           </motion.div>
 
+          {/* 🔹 Profile Photo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+            className="mb-8"
+          >
+            <div className="relative inline-block group">
+              {/* Rotating border rings */}
+              <div className="absolute inset-0 rounded-full">
+                <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full border-2 border-transparent bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 animate-spin-slow opacity-75"></div>
+              </div>
+              <div className="absolute inset-1 rounded-full">
+                <div className="w-30 h-30 md:w-38 md:h-38 lg:w-46 lg:h-46 rounded-full border-2 border-transparent bg-gradient-to-l from-blue-400 via-green-400 to-yellow-400 animate-spin-reverse opacity-60"></div>
+              </div>
+              
+              {/* Main photo container */}
+              <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full p-1 bg-gradient-to-r from-primary via-secondary to-accent group-hover:scale-105 transition-transform duration-300">
+                <img
+                  src="/myphoto.jpeg"
+                  alt="Dhana Priyan"
+                  className="w-full h-full rounded-full object-cover border-2 border-background shadow-2xl"
+                />
+              </div>
+              
+              {/* Floating particles */}
+              <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-400 rounded-full animate-float-1 opacity-80"></div>
+              <div className="absolute top-4 right-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-float-2 opacity-70"></div>
+              <div className="absolute bottom-2 left-4 w-1 h-1 bg-pink-400 rounded-full animate-float-3 opacity-60"></div>
+              <div className="absolute bottom-4 right-0 w-2 h-2 bg-green-400 rounded-full animate-float-4 opacity-75"></div>
+              
+              {/* Subtle glow on hover */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            </div>
+          </motion.div>
+
           {/* 🔹 Name + Animation */}
           <motion.h1
             initial={{ opacity: 0 }}
