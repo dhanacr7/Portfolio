@@ -3,9 +3,20 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, Smartphone, Database, Brain, GraduationCap } from 'lucide-react';
+import { ExternalLink, Github, Smartphone, Database, Brain, GraduationCap, Users } from 'lucide-react';
 
 const projects = [
+  {
+    title: 'Student Portal Management System',
+    category: 'Full-Stack Web Application',
+    description:
+      'A comprehensive academic administration portal with role-based authentication for students, teachers, and administrators. Features real-time data management, attendance tracking, marks management, and modern glassmorphism UI design.',
+    icon: Users,
+    tags: ['Java 21', 'Spring Boot 3.5.3', 'Spring Security', 'MySQL', 'JPA/Hibernate', 'HTML5', 'CSS3', 'JavaScript ES6+'],
+    gradient: 'from-blue-500 to-indigo-600',
+    codeLink: '#',
+    demoLink: '#',
+  },
   {
     title: 'Student Course Registration System',
     category: 'Web Application',
