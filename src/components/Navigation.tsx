@@ -62,9 +62,9 @@ export const Navigation = () => {
               src="/DP_logo.png"
               alt="DP Logo"
               className="
-                h-14 md:h-16 
+                h-16 md:h-20 lg:h-24
                 w-auto 
-                max-h-16 
+                max-h-24 
                 object-contain 
                 glow-cyan
                 transition-transform duration-300
