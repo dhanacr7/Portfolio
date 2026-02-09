@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { Code, Database, Cpu, Shield } from 'lucide-react';
+import { Code, Database, Cpu, Shield, Lock } from 'lucide-react';
 
 const skillCategories = [
   {
@@ -28,6 +28,14 @@ const skillCategories = [
       'I manage relational and non-relational databases efficiently using MySQL, PostgreSQL, and MongoDB to ensure data integrity and performance.',
     skills: ['MySQL', 'PostgreSQL', 'MongoDB'],
     gradient: 'from-accent to-blue-600',
+  },
+  {
+    category: 'Cybersecurity',
+    icon: Lock,
+    description:
+      'Blue Team Specialist focused on defensive security operations. Expert in UTM (Unified Threat Management) and Firewall configuration, network security monitoring, threat detection, and incident response to protect organizational infrastructure.',
+    skills: ['Blue Team Operations', 'UTM Specialist', 'Firewall Configuration', 'Network Security', 'Threat Detection', 'Incident Response'],
+    gradient: 'from-red-500 to-orange-600',
   },
   {
     category: 'Programming Languages',
