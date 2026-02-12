@@ -7,29 +7,41 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "@/context/ThemeProvider";
 
+import { useState } from "react";
+import SingularityLoader from "./components/SingularityLoader";
+
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <ThemeProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            {/* 🏠 Home Page */}
-            <Route path="/" element={<Index />} />
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
 
-            {/* 🚫 Remove Resume Page route (using static PDF instead) */}
-            {/* Resume is now served directly as /resume.pdf */}
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <ThemeProvider>
+          {isLoading && <SingularityLoader onComplete={() => setIsLoading(false)} />}
+          {!isLoading && (
+            <>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* 🏠 Home Page */}
+                  <Route path="/" element={<Index />} />
 
-            {/* ⚠️ 404 Fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+                  {/* 🚫 Remove Resume Page route (using static PDF instead) */}
+                  {/* Resume is now served directly as /resume.pdf */}
+
+                  {/* ⚠️ 404 Fallback */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </>
+          )}
+        </ThemeProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

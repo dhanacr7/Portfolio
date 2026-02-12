@@ -1,49 +1,43 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Card } from '@/components/ui/card';
-import { Code, Database, Cpu, Shield, Lock } from 'lucide-react';
+import { Code, Database, Cpu, Shield, Lock, Terminal } from 'lucide-react';
 
 const skillCategories = [
   {
     category: 'Frontend Development',
     icon: Code,
-    description:
-      'I build responsive and modern UIs using HTML, CSS, JavaScript, Flutter, and React.js. I focus on clean design and seamless user experiences across web and mobile platforms.',
+    description: 'I build responsive and modern UIs using HTML, CSS, JavaScript, Flutter, and React.js. I focus on clean design and seamless user experiences.',
     skills: ['HTML', 'CSS', 'JavaScript', 'Flutter', 'React.js'],
-    gradient: 'from-primary to-cyan-500',
+    accent: 'border-cyan-500/50 text-cyan-400'
   },
   {
     category: 'Backend Development',
     icon: Cpu,
-    description:
-      'I work with Spring Boot (Java) and the MERN stack (Node.js + Express.js) to develop secure, scalable, and well-structured backend systems.',
+    description: 'I work with Spring Boot (Java) and the MERN stack (Node.js + Express.js) to develop secure, scalable, and well-structured backend systems.',
     skills: ['Java', 'Spring Boot', 'Node.js', 'Express.js', 'MERN Stack'],
-    gradient: 'from-secondary to-purple-500',
+    accent: 'border-amber-500/50 text-amber-400'
   },
   {
     category: 'Databases',
     icon: Database,
-    description:
-      'I manage relational and non-relational databases efficiently using MySQL, PostgreSQL, and MongoDB to ensure data integrity and performance.',
+    description: 'I manage relational and non-relational databases efficiently using MySQL, PostgreSQL, and MongoDB to ensure data integrity.',
     skills: ['MySQL', 'PostgreSQL', 'MongoDB'],
-    gradient: 'from-accent to-blue-600',
+    accent: 'border-blue-500/50 text-blue-400'
   },
   {
     category: 'Cybersecurity',
     icon: Lock,
-    description:
-      'Blue Team Specialist focused on defensive security operations. Expert in UTM (Unified Threat Management) and Firewall configuration, network security monitoring, threat detection, and incident response to protect organizational infrastructure.',
-    skills: ['Blue Team Operations', 'UTM Specialist', 'Firewall Configuration', 'Network Security', 'Threat Detection', 'Incident Response'],
-    gradient: 'from-red-500 to-orange-600',
+    description: 'Blue Team Specialist focused on defensive security operations, UTM, Firewall configuration, and threat detection.',
+    skills: ['Blue Team Operations', 'UTM Specialist', 'Firewall Configuration', 'Network Security', 'Threat Detection'],
+    accent: 'border-green-500/50 text-green-400'
   },
   {
     category: 'Programming Languages',
-    icon: Shield,
-    description:
-      'I use C++ for problem-solving and DSA, Java for application development, and Python for cybersecurity automation and AI-related projects.',
+    icon: Terminal,
+    description: 'I use C++ for problem-solving/DSA, Java for development, and Python for cybersecurity automation and AI.',
     skills: ['C++', 'Java', 'Python'],
-    gradient: 'from-green-400 to-emerald-600',
+    accent: 'border-purple-500/50 text-purple-400'
   },
 ];
 
@@ -52,9 +46,7 @@ export const Skills = () => {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section id="skills" className="py-20 relative" ref={ref}>
-      <div className="absolute inset-0 cyber-grid opacity-10" />
-
+    <section id="skills" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -62,43 +54,52 @@ export const Skills = () => {
           transition={{ duration: 0.6 }}
         >
           {/* Header */}
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            Technical <span className="glow-magenta">Skills</span>
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-secondary to-accent mx-auto mb-16" />
+          <div className="mb-16 flex items-center gap-4">
+            <div className="h-px bg-gray-800 flex-1" />
+            <h2 className="text-3xl font-bold text-center tracking-widest text-gray-200">
+              TECHNICAL <span className="text-cyan-500">SKILLS</span>
+            </h2>
+            <div className="h-px bg-gray-800 flex-1" />
+          </div>
 
-          {/* Skill Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {skillCategories.map((category, index) => (
+          {/* Skill Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+            {skillCategories.map((cat, index) => (
               <motion.div
-                key={category.category}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: index * 0.2, duration: 0.6 }}
+                key={cat.category}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <Card className="glass-effect cyber-border p-8 h-full hover:scale-105 transition-all duration-300">
-                  <div
-                    className={`w-14 h-14 mb-4 rounded-lg bg-gradient-to-br ${category.gradient} flex items-center justify-center`}
-                  >
-                    <category.icon className="w-7 h-7 text-white" />
+                <div className={`h-full bg-[#0a0a0b] p-6 border ${cat.accent} border-opacity-30 hover:border-opacity-80 transition-all hover:bg-[#0f0f12]`}>
+                  {/* Category Header */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className={`p-3 bg-black border ${cat.accent} border-opacity-40 rounded`}>
+                      <cat.icon className={`w-6 h-6 ${cat.accent.split(" ")[1]}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-200">{cat.category}</h3>
+                      <div className="text-[10px] text-gray-600 font-mono tracking-wider">MODULE_0{index + 1}</div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 glow-cyan">
-                    {category.category}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    {category.description}
+
+                  {/* Description */}
+                  <p className="text-sm text-gray-500 mb-6 leading-relaxed border-l-2 border-gray-800 pl-4">
+                    {cat.description}
                   </p>
+
+                  {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill) => (
+                    {cat.skills.map(skill => (
                       <span
                         key={skill}
-                        className="px-3 py-1 text-sm rounded-full bg-muted cyber-border font-medium hover:bg-primary/20 transition-colors"
+                        className="text-xs font-mono px-2 py-1 bg-black border border-gray-800 text-gray-400 hover:text-white hover:border-gray-600 transition-colors"
                       >
-                        {skill}
+                        [ {skill} ]
                       </span>
                     ))}
                   </div>
-                </Card>
+                </div>
               </motion.div>
             ))}
           </div>

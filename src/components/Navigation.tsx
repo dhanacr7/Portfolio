@@ -45,9 +45,8 @@ export const Navigation = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass-effect shadow-lg" : ""
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "glass-effect shadow-lg" : ""
+        }`}
     >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
@@ -130,20 +129,6 @@ export const Navigation = () => {
                 </motion.div>
               )}
             </div>
-
-            {/* THEME TOGGLE */}
-            <Button
-              onClick={toggleTheme}
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-blue-500" />
-              )}
-            </Button>
           </div>
 
           {/* MOBILE MENU BUTTON */}
@@ -196,22 +181,6 @@ export const Navigation = () => {
                 Download Resume
               </button>
             </div>
-
-            <Button
-              onClick={() => {
-                toggleTheme();
-                setIsMobileMenuOpen(false);
-              }}
-              variant="outline"
-              size="icon"
-              className="mt-4 rounded-full"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-blue-500" />
-              )}
-            </Button>
           </motion.div>
         )}
       </div>
