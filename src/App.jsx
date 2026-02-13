@@ -8,7 +8,7 @@ import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "@/context/ThemeProvider";
 
 import { useState } from "react";
-import SingularityLoader from "./components/SingularityLoader";
+import TimeRewindLoader from "./components/TimeRewindLoader";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +19,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider>
-          {isLoading && <SingularityLoader onComplete={() => setIsLoading(false)} />}
+          {isLoading && <TimeRewindLoader onComplete={() => setIsLoading(false)} />}
           {!isLoading && (
             <>
               <Toaster />

@@ -1,341 +1,364 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PerspectiveCamera, Stars, Float } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { PerspectiveCamera, Stars, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
 // --- Configuration ---
-const CITY_SIZE = 60;
-const BUILDING_COUNT = 600; // Increased for density
-const DURATION = 9;
+const CITY_SIZE = 100;
+const BUILDING_COUNT = 1200; // Dense city
+const STREAM_COUNT = 800;    // Dense data
 
 const COLORS = {
-    chaos: new THREE.Color('#ff0033'),
-    stable: new THREE.Color('#001133'), // Deep Blue
-    highlight: new THREE.Color('#00f0ff'), // Cyan
+    chaos: new THREE.Color('#ef4444'),    // Red-500
+    stable: new THREE.Color('#3b82f6'),   // Blue-500
+    cyan: new THREE.Color('#06b6d4'),     // Cyan-500
+    dark: '#020617'                       // Slate-950
 };
 
-// --- Utils ---
-const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
-
 // --- Shaders ---
-const BuildingMaterial = {
+const CityShader = {
+    uniforms: {
+        uTime: { value: 0 },
+        uGlitchStrength: { value: 0 }, // 0 to 1
+        uRewind: { value: 0 },         // 0 to 1
+        uScanLine: { value: 0 },       // Vertical scan position
+        uColorA: { value: COLORS.stable },
+        uColorB: { value: COLORS.chaos }
+    },
     vertexShader: `
-    varying vec2 vUv;
-    varying vec3 vPos;
-    varying float vHeight;
-    attribute vec3 instanceColor;
-    attribute float instanceHeight;
-    
-    uniform float uTime;
-    uniform float uDistortion; // 0 = none, 1 = max chaos
-    uniform float uPulse; // 0 to 1 (expansion wave)
-    
-    void main() {
-      vUv = uv;
-      vHeight = instanceHeight;
-      
-      vec3 pos = position;
-      vec4 modelPos = instanceMatrix * vec4(pos, 1.0);
-      vPos = modelPos.xyz;
-      
-      // Glitch effect (Chaos Phase)
-      if (uDistortion > 0.0) {
-        float noise = sin(modelPos.y * 0.5 + uTime * 10.0) * cos(modelPos.x * 0.5 + uTime * 5.0);
+        varying vec2 vUv;
+        varying vec3 vPos;
+        varying float vHeight;
+        attribute float aHeight;
         
-        // Random vertex displacement
-        if (noise > 0.9) {
-           pos.x += noise * uDistortion * 2.0;
+        uniform float uTime;
+        uniform float uGlitchStrength;
+        
+        void main() {
+            vUv = uv;
+            vHeight = aHeight;
+            vec3 pos = position;
+            
+            // Glitch Displacement
+            if(uGlitchStrength > 0.0) {
+                float noise = sin(pos.y * 10.0 + uTime * 20.0) * cos(pos.x * 5.0);
+                if(abs(noise) > 0.9 - (uGlitchStrength * 0.2)) {
+                    pos.x += noise * uGlitchStrength * 2.0;
+                    pos.z += noise * uGlitchStrength * 2.0;
+                }
+            }
+            
+            vec4 worldPos = instanceMatrix * vec4(pos, 1.0);
+            vPos = worldPos.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
         }
-      }
-
-      // Pulse Stabilization Effect (Ascension Phase)
-      // Expand vertical scale slightly as pulse passes?
-      float dist = length(modelPos.xz);
-      if (uPulse > 0.0) {
-         float wave = smoothstep(uPulse * 50.0 - 10.0, uPulse * 50.0, dist);
-         // No geometry change, just pass for color
-      }
-      
-      gl_Position = projectionMatrix * viewMatrix * instanceMatrix * vec4(pos, 1.0);
-    }
-  `,
+    `,
     fragmentShader: `
-    varying vec2 vUv;
-    varying vec3 vPos;
-    varying float vHeight;
-    
-    uniform float uTime;
-    uniform float uDistortion;
-    uniform float uPulse; 
-    uniform vec3 uColorChaos;
-    uniform vec3 uColorStable;
-    uniform vec3 uColorHighlight;
-    
-    void main() {
-      // Base Color Logic
-      vec3 color = uColorChaos;
-      
-      // Distance from center for pulse
-      float dist = length(vPos.xz);
-      float wave = step(dist, uPulse * 100.0); // 0 before wave, 1 after wave
-      
-      // Mix Chaos -> Stable based on Wave
-      color = mix(uColorChaos, uColorStable, wave);
-      
-      // Edges / Grid (The "Blue Glass" look)
-      float edge = step(0.95, fract(vUv.y * vHeight)) + step(0.95, fract(vUv.x));
-      
-      // Glitch overlapping pattern
-      if (uDistortion > 0.0) {
-          float glitch = sin(vPos.y * 20.0 + uTime * 20.0);
-          if (glitch > 0.9) color += vec3(1.0, 0.0, 0.0);
-      }
-      
-      // Stable Glow
-      if (wave > 0.5) {
-          // Vertical gradient
-          color += uColorHighlight * 0.1 * (vPos.y / 20.0);
-          
-          // Edge glow
-          if (edge > 0.5) {
-             color = mix(color, uColorHighlight, 0.8);
-          }
-      } else {
-          // Chaos Grid (Red)
-          if (edge > 0.5) {
-             color += vec3(1.0, 0.0, 0.0) * 0.5;
-          }
-      }
-      
-      // Transparency for glass feel (simple alpha)
-      float alpha = 0.9;
-      if (wave > 0.5 && edge < 0.5) alpha = 0.6; // Glass body
-      
-      gl_FragColor = vec4(color, alpha);
-    }
-  `
+        varying vec2 vUv;
+        varying vec3 vPos;
+        varying float vHeight;
+        
+        uniform float uTime;
+        uniform float uGlitchStrength;
+        uniform float uRewind;
+        uniform float uScanLine; // 0 to 100
+        uniform vec3 uColorA; // Stable
+        uniform vec3 uColorB; // Chaos
+        
+        void main() {
+            // Base Color Mix
+            float chaosMix = smoothstep(0.0, 1.0, uGlitchStrength);
+            vec3 color = mix(uColorA, uColorB, chaosMix);
+            
+            // Grid Lines
+            float gridY = step(0.98, fract(vUv.y * vHeight * 0.5));
+            float gridX = step(0.95, fract(vUv.x));
+            
+            // Glitch Artifacts
+            if(uGlitchStrength > 0.0) {
+                 float glitchBar = step(0.9, sin(vPos.y * 5.0 + uTime * 10.0));
+                 if(glitchBar > 0.5) color = vec3(1.0, 1.0, 1.0);
+            }
+            
+            // Stabilization Scanline
+            if(uRewind > 0.0) {
+                float dist = length(vPos.xz);
+                float wave = smoothstep(uScanLine - 5.0, uScanLine, dist) * (1.0 - smoothstep(uScanLine, uScanLine + 2.0, dist));
+                color += vec3(0.0, 1.0, 1.0) * wave * 2.0;
+                
+                // Force stable behind wave
+                if(dist < uScanLine) {
+                    color = uColorA;
+                    // Add "restored" grid
+                    if(gridY > 0.5 || gridX > 0.5) color += vec3(0.2, 0.4, 1.0); 
+                }
+            }
+            
+            // Edges logic for chaos
+            if(uGlitchStrength > 0.5 && (gridY > 0.5 || gridX > 0.5)) {
+                color = vec3(1.0, 0.2, 0.2); // Red edges in chaos
+            }
+            
+            // Darken bottom
+            color *= smoothstep(0.0, 10.0, vPos.y);
+
+            gl_FragColor = vec4(color, 1.0);
+        }
+    `
 };
 
 // --- Components ---
 
-const DigitalCity = ({ timelineRef }: { timelineRef: React.MutableRefObject<any> }) => {
+const DataRain = ({ mode }: { mode: 'chaos' | 'freeze' | 'rewind' | 'stable' }) => {
+    // Mode affects speed and direction
     const meshRef = useRef<THREE.InstancedMesh>(null);
-    const materialRef = useRef<THREE.ShaderMaterial>(null);
+    const count = STREAM_COUNT;
+
+    // Initial state
+    const { speeds, offsets } = useMemo(() => {
+        const s = new Float32Array(count);
+        const o = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+            s[i] = Math.random() * 0.5 + 0.2; // Speed
+            o[i * 3] = (Math.random() - 0.5) * CITY_SIZE * 1.5;
+            o[i * 3 + 1] = Math.random() * 40 + 5;
+            o[i * 3 + 2] = (Math.random() - 0.5) * CITY_SIZE * 1.5;
+        }
+        return { speeds: s, offsets: o };
+    }, []);
+
+    const dummy = new THREE.Object3D();
+    const color = new THREE.Color();
+
+    useFrame((state, delta) => {
+        if (!meshRef.current) return;
+
+        for (let i = 0; i < count; i++) {
+            let y = offsets[i * 3 + 1];
+
+            if (mode === 'chaos') {
+                y -= speeds[i] * delta * 20; // Fall down
+                if (y < 0) y = 45;
+            } else if (mode === 'rewind') {
+                y += speeds[i] * delta * 60; // Up fast
+                if (y > 50) y = 0;
+            } else if (mode === 'freeze') {
+                // No movement
+            }
+
+            offsets[i * 3 + 1] = y;
+
+            dummy.position.set(offsets[i * 3], y, offsets[i * 3 + 2]);
+            // Stretch based on speed
+            let len = (mode === 'freeze') ? 0.2 : speeds[i] * 5;
+            dummy.scale.set(0.1, len, 0.1);
+            dummy.updateMatrix();
+            meshRef.current.setMatrixAt(i, dummy.matrix);
+
+            // Color
+            if (mode === 'chaos') color.set(COLORS.chaos);
+            else color.set(COLORS.cyan);
+
+            meshRef.current.setColorAt(i, color);
+        }
+        meshRef.current.instanceMatrix.needsUpdate = true;
+        if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
+    });
+
+    return (
+        <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshBasicMaterial transparent opacity={0.6} toneMapped={false} />
+        </instancedMesh>
+    );
+};
+
+const City = ({ matRef }: { matRef: React.MutableRefObject<THREE.ShaderMaterial | null> }) => {
+    const meshRef = useRef<THREE.InstancedMesh>(null);
 
     // Generate City Layout
     const { positions, heights } = useMemo(() => {
-        const pos = new Float32Array(BUILDING_COUNT * 3);
+        const p = new Float32Array(BUILDING_COUNT * 3);
         const h = new Float32Array(BUILDING_COUNT);
 
-        let idx = 0;
-        // Create a "Canyon" layout (clear path in center for camera flight)
         for (let i = 0; i < BUILDING_COUNT; i++) {
-            let x = randomRange(-CITY_SIZE, CITY_SIZE);
-            let z = randomRange(-10, CITY_SIZE * 2); // Extend forward
+            let x = (Math.random() - 0.5) * CITY_SIZE;
+            let z = (Math.random() - 0.5) * CITY_SIZE;
 
-            // Canyon Logic: If near center X, push out
-            if (Math.abs(x) < 8) {
-                x = (x > 0 ? 1 : -1) * (8 + Math.random() * 5);
-            }
+            // Avoid center channel for camera flyby
+            if (Math.abs(x) < 5) x += (x > 0 ? 5 : -5);
 
-            pos[idx * 3] = x;
-            pos[idx * 3 + 1] = 0;
-            pos[idx * 3 + 2] = z;
+            p[i * 3] = x;
+            p[i * 3 + 1] = 0; // Ground
+            p[i * 3 + 2] = z;
 
-            // Taller buildings near the "road"
-            const proximity = Math.max(0, 1 - (Math.abs(x) / 30));
-            h[idx] = randomRange(5, 10) + (proximity * 30); // Up to 40 units tall
+            // Variable height, taller near center-ish
+            let dist = Math.sqrt(x * x + z * z);
+            let height = Math.random() * 30 + 5;
+            if (dist < 20) height += 20;
 
-            idx++;
+            h[i] = height;
         }
-        return { positions: pos, heights: h };
+        return { positions: p, heights: h };
     }, []);
 
-    const tempObj = new THREE.Object3D();
+    const dummy = new THREE.Object3D();
 
-    useFrame((state) => {
-        if (!materialRef.current) return;
-        materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-    });
-
-    // Set initial positions
     useEffect(() => {
         if (!meshRef.current) return;
         for (let i = 0; i < BUILDING_COUNT; i++) {
-            tempObj.position.set(positions[i * 3], heights[i] / 2, positions[i * 3 + 2]);
-            tempObj.scale.set(2, heights[i], 2); // Thicker buildings
-            tempObj.updateMatrix();
-            meshRef.current.setMatrixAt(i, tempObj.matrix);
+            dummy.position.set(positions[i * 3], heights[i] / 2, positions[i * 3 + 2]);
+            dummy.scale.set(2 + Math.random(), heights[i], 2 + Math.random());
+            dummy.updateMatrix();
+            meshRef.current.setMatrixAt(i, dummy.matrix);
         }
         meshRef.current.instanceMatrix.needsUpdate = true;
+        // Attribute for shader
+        meshRef.current.geometry.setAttribute('aHeight', new THREE.InstancedBufferAttribute(heights, 1));
+    }, []);
 
-        // Populate height attribute for shader
-        meshRef.current.geometry.setAttribute(
-            'instanceHeight',
-            new THREE.InstancedBufferAttribute(heights, 1)
-        );
-    }, [positions, heights]);
+    useFrame((state) => {
+        if (matRef.current) matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    });
 
     return (
         <instancedMesh ref={meshRef} args={[undefined, undefined, BUILDING_COUNT]}>
             <boxGeometry args={[1, 1, 1]} />
             <shaderMaterial
-                ref={materialRef}
-                vertexShader={BuildingMaterial.vertexShader}
-                fragmentShader={BuildingMaterial.fragmentShader}
-                uniforms={{
-                    uTime: { value: 0 },
-                    uDistortion: { value: 1.0 }, // Starts fully distorted
-                    uPulse: { value: 0 },
-                    uColorChaos: { value: COLORS.chaos },
-                    uColorStable: { value: COLORS.stable },
-                    uColorHighlight: { value: COLORS.highlight },
-                }}
+                ref={matRef}
+                uniforms={THREE.UniformsUtils.clone(CityShader.uniforms)}
+                vertexShader={CityShader.vertexShader}
+                fragmentShader={CityShader.fragmentShader}
                 transparent
-                side={THREE.DoubleSide}
             />
         </instancedMesh>
     );
 };
 
-// --- Camera & Sequence Controller ---
-const Director = ({ onComplete, sceneRef }: { onComplete: () => void, sceneRef: any }) => {
+const TextDecoder = ({ text, start, className }: any) => {
+    const [display, setDisplay] = useState("");
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@$";
+
+    useEffect(() => {
+        if (!start) return;
+
+        let iter = 0;
+        const interval = setInterval(() => {
+            setDisplay(text.split("").map((letter: string, index: number) => {
+                if (index < iter) return letter;
+                return chars[Math.floor(Math.random() * chars.length)];
+            }).join(""));
+
+            if (iter >= text.length) clearInterval(interval);
+            iter += 1 / 2; // Speed
+        }, 30);
+        return () => clearInterval(interval);
+    }, [start, text]);
+
+    return <div className={className}>{display}</div>;
+};
+
+// --- Scene Logic ---
+// Controls camera and animation state inside R3F Canvas context
+const SceneDirector = ({ onComplete, setMode, setShowText, matRef }: any) => {
     const camRef = useRef<THREE.PerspectiveCamera>(null);
-    const tl = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
-        if (!camRef.current) return;
+        // Wait for refs to be ready
+        if (!camRef.current || !matRef.current) return;
 
-        // Find the material in the scene to animate uniforms
-        // A bit hacky, but robust enough for this component structure
-        let mat: THREE.ShaderMaterial | null = null;
+        const tl = gsap.timeline();
 
-        // Wait for mount
-        setTimeout(() => {
-            // @ts-ignore
-            const mesh = sceneRef.current?.children.find(c => c.isInstancedMesh);
-            if (mesh) mat = mesh.material;
+        // 1. Chaos (0s - 3s)
+        // Camera flies forward
+        tl.to(camRef.current.position, {
+            z: 0,
+            duration: 3,
+            ease: "none"
+        });
 
-            if (!mat) return;
+        // Glitch intensity ramps up
+        tl.to(matRef.current.uniforms.uGlitchStrength, { value: 1.0, duration: 2.5, ease: "rough" }, 0);
 
-            // --- MASTER TIMELINE ---
-            tl.current = gsap.timeline({
-                onComplete: () => {
-                    // End sequence
-                }
-            });
+        // 2. Freeze (3s)
+        tl.call(() => setMode('freeze'));
+        tl.to({}, { duration: 0.2 }); // Hold
 
-            // 1. CHAOS (0-2s)
-            // Camera: Shaky, looking around
-            camRef.current.position.set(0, 5, -10);
-            tl.current.to(camRef.current.position, {
-                x: 2, y: 6, z: -8, duration: 2, ease: "rough({ strength: 1, points: 20 })" // Shaky
-            }, 0);
+        // 3. Rewind (3.2s - 5.5s)
+        tl.call(() => setMode('rewind'));
 
-            // 2. FREEZE (2-3s)
-            tl.current.to(mat.uniforms.uDistortion, { value: 0, duration: 0.1 }, 2); // Snap freeze
+        // Camera SUCTION effect (Pull back fast + FOV warp)
+        tl.to(camRef.current.position, { z: -80, y: 40, duration: 2.3, ease: "power3.inOut" }, "rewind");
+        tl.to(camRef.current, { fov: 100, duration: 1, yoyo: true, repeat: 1 }, "rewind");
 
-            // 3. REWIND (3-4.5s)
-            // Camera pulls back slightly
-            tl.current.to(camRef.current.position, { z: -20, duration: 1.5, ease: "power2.inOut" }, 3);
+        // Shader clean up
+        tl.to(matRef.current.uniforms.uGlitchStrength, { value: 0, duration: 1.5 }, "rewind");
+        tl.to(matRef.current.uniforms.uRewind, { value: 1, duration: 0.1 }, "rewind"); // Enable scanline
+        tl.to(matRef.current.uniforms.uScanLine, { value: 50, duration: 2, ease: "power2.out" }, "rewind");
 
-            // 4. STABILIZE / PULSE (4.5s)
-            tl.current.to(mat.uniforms.uPulse, { value: 2.0, duration: 2, ease: "power2.out" }, 4.5);
+        // 4. Stable (5.5s)
+        tl.call(() => setMode('stable'));
+        tl.call(() => setShowText(true));
 
-            // 5. ASCENSION FLIGHT (5s - 8s)
-            // Fly THROUGH the city canyon
-            tl.current.to(camRef.current.position, {
-                x: 0,
-                y: 20, // Rise up
-                z: 80, // Fly far forward through city
-                duration: 4,
-                ease: "power2.inOut"
-            }, 4.5);
+        // 5. Finish (8.5s)
+        tl.call(onComplete, [], 8.5);
 
-            tl.current.to(camRef.current.rotation, {
-                x: 0,
-                duration: 4
-            }, 4.5);
+        return () => { tl.kill(); };
 
-        }, 100);
+    }, [onComplete, setMode, setShowText]); // Runs once when component mounts inside Canvas
 
-        return () => { tl.current?.kill(); };
-    }, [sceneRef]);
-
-    return <PerspectiveCamera ref={camRef} makeDefault position={[0, 5, -20]} fov={75} />;
+    return <PerspectiveCamera ref={camRef} makeDefault position={[0, 5, -40]} fov={60} />;
 };
 
-// --- Name Reveal (HTML Overlay) ---
-const NameReveal = ({ show }: { show: boolean }) => {
-    return (
-        <div className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-            <div className="text-center z-10">
-                {/* Decorative Line */}
-                <div className={`w-[1px] h-32 bg-gradient-to-b from-transparent via-cyan-500 to-transparent mx-auto mb-8 transition-all duration-1000 ${show ? 'h-32 opacity-100' : 'h-0 opacity-0'}`} />
-
-                <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tighter drop-shadow-[0_0_15px_rgba(0,240,255,0.8)]">
-                    DHANAPRIYAN
-                </h1>
-
-                <div className="mt-6 flex items-center justify-center gap-4 text-cyan-400/80 font-mono tracking-[0.3em] text-sm md:text-base uppercase">
-                    <span>Senior</span>
-                    <span className="w-1 h-1 bg-cyan-500 rounded-full" />
-                    <span>Cyber Security</span>
-                    <span className="w-1 h-1 bg-cyan-500 rounded-full" />
-                    <span>Engineer</span>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// --- Main Container ---
 const TimeRewindLoader = ({ onComplete }: { onComplete: () => void }) => {
+    const [mode, setMode] = useState<'chaos' | 'freeze' | 'rewind' | 'stable'>('chaos');
     const [showText, setShowText] = useState(false);
-    const sceneRef = useRef<THREE.Group>(null);
 
-    useEffect(() => {
-        // Trigger text reveal towards end of flight
-        const timer = setTimeout(() => setShowText(true), 7500);
-
-        // Trigger completion (transition to home)
-        const exitTimer = setTimeout(onComplete, 9500);
-
-        return () => { clearTimeout(timer); clearTimeout(exitTimer); };
-    }, [onComplete]);
+    // We create the Ref here, pass it to City (to attach material) and Director (to animate it)
+    const matRef = useRef<THREE.ShaderMaterial>(null);
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#020205]">
-            {/* Gradient Overlay for Depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#020205] via-transparent to-[#020205]/50 pointer-events-none z-10" />
-
-            {/* Skip */}
-            <div className="absolute top-8 right-8 z-[60]">
-                <button
-                    onClick={onComplete}
-                    className="text-xs uppercase tracking-[0.2em] text-cyan-500/50 hover:text-cyan-400 transition-colors border border-cyan-900/30 px-6 py-2 bg-black/20 backdrop-blur-md"
-                >
-                    Skip
-                </button>
-            </div>
-
-            <NameReveal show={showText} />
-
+        <div className="fixed inset-0 z-50 bg-[#020617] text-white overflow-hidden">
             <Canvas>
-                <color attach="background" args={['#020205']} />
-                <fog attach="fog" args={['#020205', 20, 100]} />
+                <color attach="background" args={['#020617']} />
+                <fog attach="fog" args={['#020617', 10, 150]} />
 
-                <group ref={sceneRef}>
-                    <DigitalCity timelineRef={sceneRef} />
-                </group>
+                {/* Director handles camera and timeline inside Canvas context */}
+                <SceneDirector
+                    onComplete={onComplete}
+                    setMode={setMode}
+                    setShowText={setShowText}
+                    matRef={matRef}
+                />
 
-                <Director onComplete={onComplete} sceneRef={sceneRef} />
+                <City matRef={matRef} />
+                <DataRain mode={mode} />
 
-                <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
-
+                <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
                 <ambientLight intensity={0.5} />
             </Canvas>
+
+            {/* Overlay UI */}
+            {showText && (
+                <div className="absolute inset-0 flex items-center justify-center flex-col z-20 pointer-events-none">
+                    <TextDecoder
+                        text="SECURITY IS ENGINEERED"
+                        start={showText}
+                        className="text-cyan-500 text-xs md:text-sm tracking-[0.5em] font-mono mb-4"
+                    />
+                    <div className="overflow-hidden">
+                        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter animate-in slide-in-from-bottom duration-700">
+                            DHANAPRIYAN
+                        </h1>
+                    </div>
+                </div>
+            )}
+
+            {/* Playback Controls / Skip */}
+            <button onClick={onComplete} className="absolute top-8 right-8 z-50 text-[10px] text-cyan-600 border border-cyan-900 px-3 py-1 hover:bg-cyan-900/20 transition-all uppercase tracking-widest">
+                Skip Intro
+            </button>
         </div>
     );
 };

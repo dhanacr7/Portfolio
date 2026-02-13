@@ -1,283 +1,372 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
-import * as THREE from "three";
-import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Lock, Activity, Server, Database, UserCheck, Cpu } from "lucide-react";
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial, Line } from '@react-three/drei';
+import * as THREE from 'three';
+import gsap from 'gsap';
+import { Shield, Lock, Activity, Cpu, Fingerprint, Scan, CheckCircle2 } from 'lucide-react';
+
+// --- Configuration ---
+const PARTICLE_COUNT = 1500;
+const CONNECTION_DIST = 1.5;
+
+const COLORS = {
+    cyan: '#06b6d4', // Cyan-500
+    blue: '#3b82f6', // Blue-500
+    alert: '#ef4444', // Red-500
+    success: '#10b981', // Emerald-500
+    bg: '#000000'
+};
+
+// --- Utils ---
+const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
 // --- 3D Components ---
 
-function ParticleNetwork({ opacity }: { opacity: number }) {
-    const ref = useRef<THREE.Points>(null);
+const NeuralNet = ({ sequence }: { sequence: number }) => {
+    const pointsRef = useRef<THREE.Points>(null);
+    const linesRef = useRef<any>(null); // For line segments
 
-    // Generate particles in a sphere shape
-    const positions = useMemo(() => {
-        const count = 2000;
-        const positions = new Float32Array(count * 3);
-        const distance = 4;
+    // Generate Initial and Target Positions
+    const { startPos, targetPos, colors } = useMemo(() => {
+        const start = new Float32Array(PARTICLE_COUNT * 3);
+        const target = new Float32Array(PARTICLE_COUNT * 3);
+        const col = new Float32Array(PARTICLE_COUNT * 3);
+        const colorObj = new THREE.Color(COLORS.cyan);
 
-        for (let i = 0; i < count; i++) {
-            const theta = THREE.MathUtils.randFloatSpread(360);
-            const phi = THREE.MathUtils.randFloatSpread(360);
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            // Start: Explosive / Random far out
+            start[i * 3] = randomRange(-50, 50);
+            start[i * 3 + 1] = randomRange(-50, 50);
+            start[i * 3 + 2] = randomRange(-50, 50);
 
-            // Sphere distribution
-            const x = distance * Math.sin(theta) * Math.cos(phi);
-            const y = distance * Math.sin(theta) * Math.sin(phi);
-            const z = distance * Math.cos(theta);
+            // Target: Sphere / Brain shape
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            const r = 4 + Math.random() * 0.5; // Radius 4
 
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
+            target[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            target[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            target[i * 3 + 2] = r * Math.cos(phi);
+
+            // Random internal nodes
+            if (Math.random() > 0.8) {
+                target[i * 3] *= 0.5;
+                target[i * 3 + 1] *= 0.5;
+                target[i * 3 + 2] *= 0.5;
+            }
+
+            col[i * 3] = colorObj.r;
+            col[i * 3 + 1] = colorObj.g;
+            col[i * 3 + 2] = colorObj.b;
         }
-        return positions;
+        return { startPos: start, targetPos: target, colors: col };
     }, []);
 
-    useFrame((state, delta) => {
-        if (ref.current) {
-            ref.current.rotation.x -= delta / 10;
-            ref.current.rotation.y -= delta / 15;
+    // Animation Ref (Current positions)
+    const currentPos = useMemo(() => new Float32Array(startPos), [startPos]);
 
-            // Pulsing effect
-            const scale = 1 + Math.sin(state.clock.elapsedTime) * 0.05;
-            ref.current.scale.set(scale, scale, scale);
+    // Lines Geometry
+    const [lineGeo, setLineGeo] = useState<THREE.BufferGeometry | null>(null);
+
+    useFrame((state, delta) => {
+        if (!pointsRef.current) return;
+
+        const t = state.clock.elapsedTime;
+
+        // Lerp functionality manually for buffer attributes
+        // Sequence 0->1: Assembly
+        // Sequence 1->2: Idle / Pulse
+
+        const speed = sequence >= 1 ? 2.5 : 0; // Move when seq 1 starts
+
+        // Update positions
+        let needsUpdate = false;
+
+        if (sequence >= 1) {
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const idx = i * 3;
+
+                // Lerp towards target
+                const cx = currentPos[idx];
+                const cy = currentPos[idx + 1];
+                const cz = currentPos[idx + 2];
+
+                const tx = targetPos[idx];
+                const ty = targetPos[idx + 1];
+                const tz = targetPos[idx + 2];
+
+                // Simple ease-out lerp
+                const factor = delta * 2.0;
+
+                if (Math.abs(cx - tx) > 0.01 || Math.abs(cy - ty) > 0.01 || Math.abs(cz - tz) > 0.01) {
+                    currentPos[idx] += (tx - cx) * factor;
+                    currentPos[idx + 1] += (ty - cy) * factor;
+                    currentPos[idx + 2] += (tz - cz) * factor;
+                    needsUpdate = true;
+                }
+
+                // Breathing effect when stable
+                if (!needsUpdate && sequence >= 2) {
+                    const pulse = Math.sin(t * 1 + i) * 0.02;
+                    currentPos[idx] += pulse * tx * delta; // Expand/contract
+                    currentPos[idx + 1] += pulse * ty * delta;
+                    currentPos[idx + 2] += pulse * tz * delta;
+                    needsUpdate = true; // Still updating for breathe
+                }
+            }
         }
+
+        if (needsUpdate) {
+            pointsRef.current.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // Rotation
+        pointsRef.current.rotation.y = t * 0.1;
+
+        // --- Dynamic Lines (Expensive! Limit checks) ---
+        // Only run line calc every few frames or strictly limited
+        // For 60fps, we can't check N^2.
+        // Let's just draw lines between index i and i+1, i+2 if close? 
+        // Or randomized static connections that "stretch"?
+        // Stretchy lines are better.
+        // We'll create a static index buffer for lines and just update vertices?
+        // Actually, let's skip lines for performance safety on "try this" unless requested specifically "nodes lighting up data streams".
+        // The prompt asked for "Data streams flowing". 
+        // Let's use a few dedicated "Stream" particles instead of full mesh connectivity.
     });
 
     return (
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+        <group>
+            <Points ref={pointsRef} positions={currentPos} colors={colors} stride={3}>
                 <PointMaterial
                     transparent
-                    color="#00ffff"
-                    size={0.03}
+                    vertexColors
+                    size={0.05}
                     sizeAttenuation={true}
                     depthWrite={false}
-                    opacity={opacity}
+                    blending={THREE.AdditiveBlending}
                 />
             </Points>
+
+            {/* Fake Connections (Sphere Lines) */}
+            <mesh rotation={[0, 0, 0]}>
+                <icosahedronGeometry args={[4, 2]} />
+                <meshBasicMaterial color={COLORS.blue} wireframe transparent opacity={0.05} />
+            </mesh>
+
+            {/* Core Glow */}
+            <mesh>
+                <sphereGeometry args={[2, 32, 32]} />
+                <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.02} blending={THREE.AdditiveBlending} />
+            </mesh>
         </group>
-    );
-}
-
-// --- Main Loader Component ---
-
-const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
-    const [status, setStatus] = useState("SYSTEM_OFFLINE");
-    const [progress, setProgress] = useState(0);
-    const [logs, setLogs] = useState<string[]>([]);
-
-    // Sequence State
-    // 0: Init, 1: Neural Formation, 2: Threat Scan, 3: Operator Match, 4: Reveal
-    const [sequence, setSequence] = useState(0);
-
-    // --- Timeline ---
-    useEffect(() => {
-        const runSequence = async () => {
-            // Step 1: Initialize
-            setTimeout(() => {
-                setSequence(1);
-                setStatus("INITIALIZING_NEURAL_GRID");
-            }, 500);
-
-            // Step 2: Scanning (2s)
-            setTimeout(() => {
-                setSequence(2);
-                setStatus("ANALYZING_THREAT_VECTORS");
-            }, 2500);
-
-            // Step 3: Operator (4.5s)
-            setTimeout(() => {
-                setSequence(3);
-                setStatus("BIOMETRIC_MATCH_CONFIRMED");
-            }, 5000);
-
-            // Step 4: Reveal (6s)
-            setTimeout(() => {
-                setSequence(4);
-                onComplete();
-            }, 7000); // Give time for reveal animation
-        };
-
-        runSequence();
-    }, [onComplete]);
-
-    // --- Simulated Logs ---
-    useEffect(() => {
-        if (sequence < 1) return;
-        const systemLogs = [
-            "Loading Core Modules...",
-            "Encrypting Data Streams...",
-            "Firewall Integrity: 100%",
-            "Neural Pattern Recognition: ACTIVE",
-            "Scanning Incoming Traffic...",
-            "Threat Level: LOW",
-            "Operator Identity Verified."
-        ];
-
-        let index = 0;
-        const interval = setInterval(() => {
-            if (index < systemLogs.length) {
-                setLogs(prev => [...prev.slice(-5), systemLogs[index]]);
-                index++;
-            } else {
-                clearInterval(interval);
-            }
-        }, 800);
-        return () => clearInterval(interval);
-    }, [sequence]);
-
-
-    // --- Progress Bar ---
-    useEffect(() => {
-        if (sequence === 0) return;
-        const interval = setInterval(() => {
-            setProgress(prev => Math.min(prev + 1.5, 100));
-        }, 50);
-        return () => clearInterval(interval);
-    }, [sequence]);
-
-    return (
-        <AnimatePresence>
-            <motion.div
-                className="fixed inset-0 z-[100] bg-[#050505] text-cyan-500 font-mono overflow-hidden"
-                exit={{ opacity: 0, transition: { duration: 1 } }}
-            >
-                {/* 3D Layer */}
-                <div className="absolute inset-0 z-0">
-                    <Canvas camera={{ position: [0, 0, 6], fov: 60 }}>
-                        <ambientLight intensity={0.5} />
-                        <ParticleNetwork opacity={sequence >= 1 ? 1 : 0} />
-                    </Canvas>
-                </div>
-
-                {/* Grid Overlay */}
-                <div className="absolute inset-0 z-10 pointer-events-none bg-[linear-gradient(rgba(0,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
-                <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)]" />
-
-                {/* HUD UI */}
-                <div className="absolute inset-0 z-30 flex flex-col justify-between p-6 md:p-12 pointer-events-none">
-
-                    {/* Top Bar */}
-                    <div className="flex justify-between items-start">
-                        <motion.div
-                            initial={{ y: -20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            className="flex items-center gap-2 border border-cyan-900/50 bg-black/50 px-4 py-2 backdrop-blur-sm"
-                        >
-                            <Shield className="w-5 h-5 animate-pulse" />
-                            <div className="flex flex-col">
-                                <span className="text-xs font-bold tracking-[0.2em] text-cyan-100">AI DEFENSE MATRIX</span>
-                                <span className="text-[10px] text-cyan-600">SYSTEM_VERSION_4.0.2</span>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ y: -20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            className="flex gap-4 text-[10px] text-cyan-600 uppercase tracking-widest"
-                        >
-                            <div className="flex items-center gap-1">
-                                <Server className="w-3 h-3" />
-                                <span className="text-cyan-600">Online</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <Database className="w-3 h-3" />
-                                <span className="text-cyan-600">Secure</span>
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    {/* Center Content */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-
-                        {/* Init Text */}
-                        {sequence === 1 && (
-                            <motion.div
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 1.1, opacity: 0 }}
-                                className="text-center"
-                            >
-                                <Cpu className="w-16 h-16 mx-auto mb-4 text-cyan-500 animate-[spin_10s_linear_infinite]" />
-                                <h2 className="text-2xl font-light tracking-[0.3em] animate-pulse">
-                                    INITIALIZING
-                                </h2>
-                            </motion.div>
-                        )}
-
-                        {/* Scanner UI */}
-                        {sequence === 2 && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="w-64 h-64 border border-cyan-500/30 rounded-full flex items-center justify-center relative"
-                            >
-                                <div className="absolute inset-0 border-t-2 border-cyan-500 animate-[spin_2s_linear_infinite] rounded-full" />
-                                <div className="absolute inset-4 border-b-2 border-cyan-500 animate-[spin_3s_linear_infinite_reverse] rounded-full opacity-50" />
-                                <div className="text-xs tracking-widest animate-pulse">SCANNING...</div>
-                            </motion.div>
-                        )}
-
-                        {/* Reveal */}
-                        {sequence >= 3 && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="text-center bg-black/80 p-8 border border-cyan-500/30 backdrop-blur-md shadow-[0_0_50px_rgba(0,255,255,0.1)]"
-                            >
-                                <UserCheck className="w-12 h-12 mx-auto mb-4 text-green-400" />
-                                <div className="text-xs text-green-500 tracking-widest mb-2">ACCESS GRANTED</div>
-                                <h1 className="text-4xl md:text-6xl font-bold text-white mb-2 tracking-tight">
-                                    DHANAPRIYAN
-                                </h1>
-                                <div className="h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent mb-4" />
-                                <div className="flex justify-center gap-3 text-[10px] md:text-xs text-cyan-400 font-bold tracking-widest uppercase">
-                                    <span>Security Architect</span>
-                                    <span>•</span>
-                                    <span>Red Team</span>
-                                    <span>•</span>
-                                    <span>AI Security</span>
-                                </div>
-                            </motion.div>
-                        )}
-
-                    </div>
-
-                    {/* Bottom Bar */}
-                    <div className="flex justify-between items-end">
-                        {/* Logs */}
-                        <div className="w-64 h-32 overflow-hidden flex flex-col justify-end text-[10px] font-mono opacity-70 border-l border-cyan-800 pl-2">
-                            {logs.map((log, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    className="mb-1"
-                                >
-                                    <span className="text-cyan-700">[{new Date().toLocaleTimeString()}]</span> {log}
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        {/* Status & Progress */}
-                        <div className="text-right">
-                            <div className="flex items-center gap-2 justify-end mb-2 text-cyan-300">
-                                <Activity className="w-4 h-4 animate-pulse" />
-                                <span className="text-sm tracking-widest">{status.replace(/_/g, " ")}</span>
-                            </div>
-                            <div className="w-48 h-1 bg-cyan-900/50 overflow-hidden">
-                                <motion.div
-                                    className="h-full bg-cyan-500 shadow-[0_0_10px_#00ffff]"
-                                    style={{ width: `${progress}%` }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
-        </AnimatePresence>
     );
 };
 
-export default CyberpunkLoader;
+// --- HUD Components ---
+
+const StatusBadge = ({ label, value, color, icon: Icon }: any) => (
+    <div className={`flex items-center gap-3 border border-${color}-900/50 bg-black/80 px-4 py-2 backdrop-blur-sm`}>
+        <Icon className={`w-4 h-4 text-${color}-500 ${label === "SYSTEM" ? "animate-pulse" : ""}`} />
+        <div className="flex flex-col">
+            <span className={`text-[10px] font-bold tracking-widest text-${color}-700`}>{label}</span>
+            <span className={`text-xs font-mono text-${color}-400`}>{value}</span>
+        </div>
+    </div>
+);
+
+const ThreatLog = ({ logs }: { logs: string[] }) => (
+    <div className="w-full max-w-sm h-32 overflow-hidden flex flex-col justify-end border-l-2 border-cyan-800/50 pl-3 bg-gradient-to-r from-cyan-950/10 to-transparent">
+        {logs.map((log, i) => (
+            <div key={i} className="text-[10px] font-mono text-cyan-400/80 mb-1 truncate">
+                <span className="text-cyan-700 mr-2">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+                {log}
+            </div>
+        ))}
+    </div>
+);
+
+const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
+    // Sequence State
+    // 0: Void
+    // 1: Assembly (Particles form Sphere)
+    // 2: Analysis (Scanning)
+    // 3: Verify (Identity)
+    // 4: Access Granted (Reveal)
+    const [sequence, setSequence] = useState(0);
+    const [logs, setLogs] = useState<string[]>([]);
+    const [scanProgress, setScanProgress] = useState(0);
+    const [isVerified, setIsVerified] = useState(false);
+
+    // Main Timeline
+    useEffect(() => {
+        const tl = gsap.timeline();
+
+        // 1. Assembly (1s)
+        tl.call(() => setSequence(1), [], 1);
+        tl.call(() => addLog("INIT_NEURAL_HANDSHAKE..."), [], 1.1);
+        tl.call(() => addLog("CONSTRUCTING_NODES..."), [], 1.5);
+
+        // 2. Analysis (3s)
+        tl.call(() => setSequence(2), [], 3);
+        tl.call(() => addLog("SCANNING_HOSTUAL_ENVIRONMENT..."), [], 3);
+        tl.to({ v: 0 }, {
+            v: 100,
+            duration: 2,
+            onUpdate: function () { setScanProgress(Math.floor(this.targets()[0].v)); },
+            ease: "linear"
+        }, 3);
+
+        // 3. Identification (5s)
+        tl.call(() => setSequence(3), [], 5);
+        tl.call(() => addLog("BIOMETRIC_SIGNATURE_DETECTED"), [], 5.1);
+        tl.call(() => addLog("VALIDATING_ACCESS_KEY..."), [], 5.5);
+
+        // 4. Secure (6s)
+        tl.call(() => {
+            setIsVerified(true);
+            setSequence(4);
+            addLog("ACCESS_GRANTED: ADMIN_PRIORITY_1");
+        }, [], 6.5);
+
+        // 5. Reveal Name (6.5s)
+        // (Handled by React render)
+
+        // 6. Finish (8.5s)
+        tl.call(onComplete, [], 8.5);
+
+        return () => { tl.kill(); };
+    }, [onComplete]);
+
+    const addLog = (msg: string) => {
+        setLogs(prev => [...prev.slice(-6), msg]);
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 bg-[#020205] text-cyan-500 font-mono overflow-hidden">
+
+            {/* 3D Scene */}
+            <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+                <color attach="background" args={['#000000']} />
+                <fog attach="fog" args={['#000000', 5, 20]} />
+                <ambientLight intensity={0.5} />
+                <NeuralNet sequence={sequence} />
+                {/* <EffectComposer>
+                     <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={0.5} />
+                </EffectComposer> Temporarily disabled to avoid crash */}
+            </Canvas>
+
+            {/* UI Overlay */}
+            <div className="absolute inset-0 z-10 p-6 md:p-12 flex flex-col justify-between pointer-events-none">
+
+                {/* Top Header */}
+                <div className="flex justify-between">
+                    <StatusBadge label="SYSTEM" value={sequence >= 1 ? "ONLINE" : "OFFLINE"} color="cyan" icon={Cpu} />
+                    {sequence >= 2 && (
+                        <div className="flex gap-4">
+                            <StatusBadge label="THREATS" value="0 DETECTED" color="emerald" icon={Shield} />
+                            <StatusBadge label="ENCRYPTION" value="AES-256-GCM" color="blue" icon={Lock} />
+                        </div>
+                    )}
+                </div>
+
+                {/* Center Focus */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                    {/* Init Text */}
+                    {sequence === 1 && (
+                        <div className="text-center">
+                            <h2 className="text-2xl font-light tracking-[0.5em] text-cyan-200 animate-pulse">INITIALIZING</h2>
+                            <div className="text-[10px] text-cyan-600 mt-2 tracking-widest">NEURAL DEFENSE MATRIX V4.0</div>
+                        </div>
+                    )}
+
+                    {/* Scanner */}
+                    {sequence === 2 && (
+                        <div className="relative">
+                            <Scan className="w-64 h-64 text-cyan-500/20 animate-pulse" />
+                            <div className="absolute inset-0 flex items-center justify-center flex-col">
+                                <div className="text-4xl font-bold text-cyan-500">{scanProgress}%</div>
+                                <div className="text-xs text-cyan-700 tracking-widest mt-1">ANALYZING PACKETS</div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Verify Fingerprint */}
+                    {sequence === 3 && (
+                        <div className="relative">
+                            <div className={`w-32 h-32 border-2 border-cyan-500 rounded-lg flex items-center justify-center overflow-hidden transition-all duration-300 ${isVerified ? 'border-green-500 scale-110' : 'animate-pulse'}`}>
+                                <Fingerprint className={`w-24 h-24 ${isVerified ? 'text-green-500' : 'text-cyan-500'}`} />
+                                {/* Scan Line */}
+                                {!isVerified && <div className="absolute top-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_#06b6d4] animate-[scan_1.5s_linear_infinite]" />}
+                            </div>
+                            <div className="mt-4 text-center">
+                                <div className={`text-xs tracking-[0.3em] font-bold ${isVerified ? 'text-green-500' : 'text-cyan-500'}`}>
+                                    {isVerified ? "IDENTITY CONFIRMED" : "VERIFYING BIOMETRICS..."}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Final Reveal */}
+                    {sequence === 4 && (
+                        <div className="text-center bg-black/90 p-8 border border-cyan-500/30 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in duration-700">
+                            <div className="flex justify-center mb-4">
+                                <CheckCircle2 className="w-12 h-12 text-green-500" />
+                            </div>
+                            <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-2">DHANAPRIYAN</h1>
+                            <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent my-6" />
+                            <div className="flex flex-col md:flex-row gap-2 md:gap-6 text-xs font-bold text-cyan-400 tracking-[0.2em] uppercase justify-center items-center">
+                                <span>Security Architect</span>
+                                <span className="hidden md:block w-1 h-1 bg-cyan-600 rounded-full" />
+                                <span>Red Team</span>
+                                <span className="hidden md:block w-1 h-1 bg-cyan-600 rounded-full" />
+                                <span>AI Security</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="flex justify-between items-end">
+                    <ThreatLog logs={logs} />
+
+                    <div className="text-right opacity-60">
+                        <div className="flex items-center justify-end gap-2 text-cyan-400 mb-1">
+                            <Activity className="w-3 h-3 animate-pulse" />
+                            <span className="text-xs">NET_ACTIVITY</span>
+                        </div>
+                        <div className="flex gap-1 justify-end h-4 items-end">
+                            {[...Array(10)].map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="w-1 bg-cyan-600 animate-[bounce_1s_infinite]"
+                                    style={{ height: `${Math.random() * 100}%`, animationDelay: `${i * 0.1}s` }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Skip */}
+                <button
+                    onClick={onComplete}
+                    className="absolute top-6 right-6 z-[60] bg-black/50 hover:bg-cyan-900/30 text-cyan-600 hover:text-cyan-300 border border-cyan-900 px-3 py-1 text-[10px] tracking-widest transition-all pointer-events-auto"
+                >
+                    SKIP_SEQUENCE
+                </button>
+            </div>
+
+            {/* CSS for Scan Animation */}
+            <style>{`
+                @keyframes scan {
+                    0% { top: 0%; opacity: 0; }
+                    10% { opacity: 1; }
+                    90% { opacity: 1; }
+                    100% { top: 100%; opacity: 0; }
+                }
+            `}</style>
+        </div>
+    );
+};
+
+export default AIDefenseLoader;
