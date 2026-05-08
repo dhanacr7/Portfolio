@@ -260,14 +260,14 @@ const CyberDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
         <div className="fixed inset-0 z-50 bg-black text-white font-mono overflow-hidden">
             {/* Skip Button */}
             <div className="absolute top-8 right-8 z-[60]">
-                <button onClick={onComplete} className="text-xs uppercase tracking-[0.2em] text-cyan-500 hover:text-white transition-colors border border-cyan-900 px-4 py-2 bg-black/50 backdrop-blur-sm">
+                <button onClick={onComplete} className="text-xs uppercase tracking-[0.2em] text-violet-400 hover:text-white transition-colors border border-violet-500 px-4 py-2 bg-black/50 backdrop-blur-sm">
                     Skip Sequence
                 </button>
             </div>
 
             {/* HUD Overlay */}
             <div className="absolute bottom-12 left-12 z-[60]">
-                <div className="text-xs text-cyan-500 tracking-widest mb-1">STATUS</div>
+                <div className="text-xs text-violet-400 tracking-widest mb-1">STATUS</div>
                 <div className="text-xl md:text-2xl font-bold tracking-tighter text-white">
                     {text} <span className="animate-pulse">_</span>
                 </div>

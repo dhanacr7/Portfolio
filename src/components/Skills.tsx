@@ -9,14 +9,14 @@ const skillCategories = [
     icon: Code,
     description: 'I build responsive and modern UIs using HTML, CSS, JavaScript, Flutter, and React.js. I focus on clean design and seamless user experiences.',
     skills: ['HTML', 'CSS', 'JavaScript', 'Flutter', 'React.js'],
-    accent: 'border-cyan-500/50 text-cyan-400'
+    accent: 'border-violet-500 text-violet-400'
   },
   {
     category: 'Backend Development',
     icon: Cpu,
     description: 'I work with Spring Boot (Java) and the MERN stack (Node.js + Express.js) to develop secure, scalable, and well-structured backend systems.',
     skills: ['Java', 'Spring Boot', 'Node.js', 'Express.js', 'MERN Stack'],
-    accent: 'border-amber-500/50 text-amber-400'
+    accent: 'border-violet-300 text-violet-300'
   },
   {
     category: 'Databases',
@@ -57,7 +57,7 @@ export const Skills = () => {
           <div className="mb-16 flex items-center gap-4">
             <div className="h-px bg-gray-800 flex-1" />
             <h2 className="text-3xl font-bold text-center tracking-widest text-gray-200">
-              TECHNICAL <span className="text-cyan-500">SKILLS</span>
+              TECHNICAL <span className="text-violet-400">SKILLS</span>
             </h2>
             <div className="h-px bg-gray-800 flex-1" />
           </div>

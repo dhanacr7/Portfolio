@@ -10,7 +10,7 @@ const HEX_COUNT = 300;
 const SPHERE_RADIUS = 3.5;
 const COLORS = {
     black: '#000000',
-    cyan: '#06b6d4', // Cyan-500
+    cyan: '#7F77DD', // Cyan-500
     magenta: '#d946ef', // Fuchsia-500
     dark: '#0f172a', // Slate-900
 };
@@ -351,15 +351,15 @@ const CyberHUD = ({ sequence, integrity }: { sequence: number, integrity: number
             <div className="flex justify-between items-start">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <Hexagon className={`w-6 h-6 text-cyan-500 ${sequence === 2 ? 'animate-spin' : ''}`} />
-                        <span className="text-cyan-400 font-bold tracking-[0.3em] text-sm">CYBER_COMMAND_CORE</span>
+                        <Hexagon className={`w-6 h-6 text-violet-400 ${sequence === 2 ? 'animate-spin' : ''}`} />
+                        <span className="text-violet-400 font-bold tracking-[0.3em] text-sm">CYBER_COMMAND_CORE</span>
                     </div>
-                    <div className="text-[10px] text-cyan-700 mt-1">SECURE_CHANNEL_ESTABLISHED</div>
+                    <div className="text-[10px] text-violet-400 mt-1">SECURE_CHANNEL_ESTABLISHED</div>
                 </div>
 
                 <div className="text-right">
-                    <div className="text-[10px] text-cyan-700 tracking-widest">SYSTEM_STATUS</div>
-                    <div className={`text-xl font-mono ${sequence >= 2 ? 'text-cyan-400' : 'text-cyan-900'}`}>
+                    <div className="text-[10px] text-violet-400 tracking-widest">SYSTEM_STATUS</div>
+                    <div className={`text-xl font-mono ${sequence >= 2 ? 'text-violet-400' : 'text-violet-400'}`}>
                         {sequence === 0 ? "OFFLINE" : sequence < 3 ? "ARMED" : "UNLOCKED"}
                     </div>
                 </div>
@@ -368,12 +368,12 @@ const CyberHUD = ({ sequence, integrity }: { sequence: number, integrity: number
             {/* Center Scan Reticle */}
             {sequence === 2 && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative w-[300px] h-[300px] border border-cyan-500/20 rounded-full flex items-center justify-center animate-pulse">
-                        <Crosshair className="w-full h-full text-cyan-500/10 absolute p-4" />
-                        <div className="absolute bottom-10 text-xs text-cyan-400 font-mono tracking-widest">
+                    <div className="relative w-[300px] h-[300px] border border-violet-500 rounded-full flex items-center justify-center animate-pulse">
+                        <Crosshair className="w-full h-full text-violet-400 absolute p-4" />
+                        <div className="absolute bottom-10 text-xs text-violet-400 font-mono tracking-widest">
                             INTEGRITY CHECK: {integrity}%
                         </div>
-                        <div className="w-[100%] h-[2px] bg-cyan-500/50 absolute animate-[scan_2s_linear_infinite]" />
+                        <div className="w-[100%] h-[2px] bg-violet-500 absolute animate-[scan_2s_linear_infinite]" />
                     </div>
                 </div>
             )}
@@ -382,13 +382,13 @@ const CyberHUD = ({ sequence, integrity }: { sequence: number, integrity: number
             {sequence === 4 && (
                 <div className="absolute inset-0 flex items-center justify-center flex-col">
                     <div className="z-50 text-center animate-in zoom-in duration-1000">
-                        <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-cyan-500 tracking-tighter drop-shadow-[0_0_20px_rgba(6,182,212,0.8)]">
+                        <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-violet-500 tracking-tighter drop-shadow-[0_0_20px_rgba(6,182,212,0.8)]">
                             DHANAPRIYAN
                         </h1>
                         <div className="flex items-center justify-center gap-4 mt-6">
-                            <div className="h-[1px] w-12 bg-cyan-700" />
-                            <span className="text-cyan-400 font-mono text-sm tracking-[0.4em] uppercase">Senior Security Engineer</span>
-                            <div className="h-[1px] w-12 bg-cyan-700" />
+                            <div className="h-[1px] w-12 bg-violet-500" />
+                            <span className="text-violet-400 font-mono text-sm tracking-[0.4em] uppercase">Senior Security Engineer</span>
+                            <div className="h-[1px] w-12 bg-violet-500" />
                         </div>
                     </div>
                 </div>
@@ -396,13 +396,13 @@ const CyberHUD = ({ sequence, integrity }: { sequence: number, integrity: number
 
             {/* Bottom Bar */}
             <div className="flex justify-between items-end">
-                <div className="flex gap-4 text-[10px] text-cyan-800 font-mono">
+                <div className="flex gap-4 text-[10px] text-violet-400 font-mono">
                     <div>LAT: 32.544</div>
                     <div>LNG: -117.23</div>
                     <div>ENC: AES-256</div>
                 </div>
 
-                <div className="flex items-center gap-2 text-cyan-600/50 text-xs tracking-widest uppercase">
+                <div className="flex items-center gap-2 text-violet-400 text-xs tracking-widest uppercase">
                     <Lock className="w-3 h-3" />
                     <span>Classified Clearance</span>
                 </div>
@@ -453,7 +453,7 @@ const CyberCommandLoader = ({ onComplete }: { onComplete: () => void }) => {
     }, [onComplete]);
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#000000] text-cyan-500 overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-[#000000] text-violet-400 overflow-hidden">
 
             <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
                 <color attach="background" args={['#000000']} />
@@ -478,7 +478,7 @@ const CyberCommandLoader = ({ onComplete }: { onComplete: () => void }) => {
             {/* Skip */}
             <button
                 onClick={onComplete}
-                className="absolute top-6 right-6 z-[60] text-cyan-800 hover:text-cyan-400 text-[10px] tracking-widest uppercase border border-cyan-900 px-4 py-2 hover:bg-cyan-950/50 transition-all"
+                className="absolute top-6 right-6 z-[60] text-violet-400 hover:text-violet-400 text-[10px] tracking-widest uppercase border border-violet-500 px-4 py-2 hover:bg-violet-500 transition-all"
             >
                 Start Session <ChevronRight className="w-3 h-3 inline ml-1" />
             </button>

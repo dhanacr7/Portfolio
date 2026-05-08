@@ -91,7 +91,7 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                 {/* Skip Button */}
                 <button
                     onClick={handleSkip}
-                    className="absolute top-8 right-8 text-xs text-neutral-600 hover:text-cyan-500 transition-colors uppercase tracking-widest z-50 cursor-pointer"
+                    className="absolute top-8 right-8 text-xs text-neutral-600 hover:text-violet-400 transition-colors uppercase tracking-widest z-50 cursor-pointer"
                 >
                     [ Skip Sequence ]
                 </button>
@@ -108,7 +108,7 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                         <div className="bg-neutral-800 p-3 flex items-center gap-3">
                             <div className="flex gap-1.5">
                                 <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                                <div className="w-3 h-3 rounded-full bg-violet-300/50" />
                                 <div className="w-3 h-3 rounded-full bg-green-500/50" />
                             </div>
                             <div className="flex-1 bg-neutral-950 rounded px-3 py-1 text-xs text-neutral-400 flex items-center">
@@ -199,7 +199,7 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                                     key={i}
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className={line === "Access Granted." ? "text-cyan-400 font-bold mt-4" : ""}
+                                    className={line === "Access Granted." ? "text-violet-400 font-bold mt-4" : ""}
                                 >
                                     {line}
                                 </motion.div>
@@ -219,16 +219,16 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">
                             DHANAPRIYAN
                         </h1>
-                        <div className="flex items-center justify-center gap-4 text-cyan-500/80 tracking-widest text-sm md:text-md uppercase">
+                        <div className="flex items-center justify-center gap-4 text-violet-400 tracking-widest text-sm md:text-md uppercase">
                             <span>Senior Offensive Security Engineer</span>
-                            <span className="w-1 h-1 bg-cyan-500 rounded-full" />
+                            <span className="w-1 h-1 bg-violet-500 rounded-full" />
                             <span>Pentester</span>
                         </div>
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: "100%" }}
                             transition={{ delay: 0.5, duration: 1 }}
-                            className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mt-8 max-w-md mx-auto"
+                            className="h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent mt-8 max-w-md mx-auto"
                         />
                     </motion.div>
                 )}

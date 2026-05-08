@@ -325,23 +325,23 @@ const HUD = ({ step, setStep }: { step: number, setStep: (s: number) => void }) 
             {step >= 1 && (
                 <div className="flex flex-col items-center">
                     {/* Crosshair */}
-                    <div className="relative w-64 h-64 border border-cyan-500/30 rounded-full flex items-center justify-center animate-spin-slow">
-                        <div className="absolute top-0 bottom-0 w-[1px] bg-cyan-500/50" />
-                        <div className="absolute left-0 right-0 h-[1px] bg-cyan-500/50" />
-                        <div className="w-56 h-56 border border-dashed border-cyan-500/20 rounded-full" />
+                    <div className="relative w-64 h-64 border border-violet-500 rounded-full flex items-center justify-center animate-spin-slow">
+                        <div className="absolute top-0 bottom-0 w-[1px] bg-violet-500" />
+                        <div className="absolute left-0 right-0 h-[1px] bg-violet-500" />
+                        <div className="w-56 h-56 border border-dashed border-violet-500 rounded-full" />
                     </div>
 
                     {/* Text Data */}
-                    <div className="absolute mt-32 text-center bg-black/60 backdrop-blur-md p-4 border-l-2 border-r-2 border-cyan-500">
-                        <h2 className="text-cyan-400 font-mono text-xl tracking-[0.2em] font-bold">{text}</h2>
-                        <div className="mt-2 flex justify-between text-xs font-mono text-cyan-200/70 w-64">
+                    <div className="absolute mt-32 text-center bg-black/60 backdrop-blur-md p-4 border-l-2 border-r-2 border-violet-500">
+                        <h2 className="text-violet-400 font-mono text-xl tracking-[0.2em] font-bold">{text}</h2>
+                        <div className="mt-2 flex justify-between text-xs font-mono text-violet-400 w-64">
                             <span>THREAT_LVL: {threat}%</span>
                             <span>{status}</span>
                         </div>
                         {/* Progress Bar */}
                         <div className="mt-2 w-full h-1 bg-gray-800">
                             <div
-                                className="h-full bg-cyan-500 transition-all duration-300"
+                                className="h-full bg-violet-500 transition-all duration-300"
                                 style={{ width: step === 2 ? '100%' : `${threat}%` }}
                             />
                         </div>
@@ -350,11 +350,11 @@ const HUD = ({ step, setStep }: { step: number, setStep: (s: number) => void }) 
             )}
 
             {/* Corner Decor */}
-            <div className="absolute top-8 left-8 text-[10px] text-cyan-800 font-mono">
+            <div className="absolute top-8 left-8 text-[10px] text-violet-400 font-mono">
                 <div>SYS.32.99.1</div>
                 <div>SECURE CONNECTION</div>
             </div>
-            <div className="absolute bottom-8 right-8 text-[10px] text-cyan-800 font-mono text-right">
+            <div className="absolute bottom-8 right-8 text-[10px] text-violet-400 font-mono text-right">
                 <div>LATENCY: 12ms</div>
                 <div>ENCRYPTION: ON</div>
             </div>
@@ -372,7 +372,7 @@ const FirewallLoader = ({ onComplete }: { onComplete: () => void }) => {
             <div className="absolute top-8 right-8 z-[60]">
                 <button
                     onClick={onComplete}
-                    className="text-xs uppercase tracking-[0.2em] text-cyan-500 hover:text-white transition-colors border border-cyan-900 px-4 py-2 bg-black/50 backdrop-blur-sm cursor-pointer"
+                    className="text-xs uppercase tracking-[0.2em] text-violet-400 hover:text-white transition-colors border border-violet-500 px-4 py-2 bg-black/50 backdrop-blur-sm cursor-pointer"
                 >
                     Skip Intro
                 </button>

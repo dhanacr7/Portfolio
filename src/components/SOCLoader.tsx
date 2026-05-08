@@ -265,8 +265,8 @@ const HUD = ({ logs, showTerminal, terminalText, isSecure, accessGranted }: any)
                         <span className="text-green-500 tracking-[0.3em]">SYSTEM SECURED</span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tighter mb-2">DHANAPRIYAN</h1>
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent my-4" />
-                    <p className="text-cyan-400 tracking-[0.5em] text-sm md:text-lg">SENIOR OFFENSIVE SECURITY ENGINEER</p>
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent my-4" />
+                    <p className="text-violet-400 tracking-[0.5em] text-sm md:text-lg">SENIOR OFFENSIVE SECURITY ENGINEER</p>
                 </div>
             </div>
 

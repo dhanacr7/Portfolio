@@ -12,7 +12,7 @@ const STREAM_COUNT = 800;    // Dense data
 const COLORS = {
     chaos: new THREE.Color('#ef4444'),    // Red-500
     stable: new THREE.Color('#3b82f6'),   // Blue-500
-    cyan: new THREE.Color('#06b6d4'),     // Cyan-500
+    cyan: new THREE.Color('#7F77DD'),     // Cyan-500
     dark: '#020617'                       // Slate-950
 };
 
@@ -345,7 +345,7 @@ const TimeRewindLoader = ({ onComplete }: { onComplete: () => void }) => {
                     <TextDecoder
                         text="SECURITY IS ENGINEERED"
                         start={showText}
-                        className="text-cyan-500 text-xs md:text-sm tracking-[0.5em] font-mono mb-4"
+                        className="text-violet-400 text-xs md:text-sm tracking-[0.5em] font-mono mb-4"
                     />
                     <div className="overflow-hidden">
                         <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter animate-in slide-in-from-bottom duration-700">
@@ -356,7 +356,7 @@ const TimeRewindLoader = ({ onComplete }: { onComplete: () => void }) => {
             )}
 
             {/* Playback Controls / Skip */}
-            <button onClick={onComplete} className="absolute top-8 right-8 z-50 text-[10px] text-cyan-600 border border-cyan-900 px-3 py-1 hover:bg-cyan-900/20 transition-all uppercase tracking-widest">
+            <button onClick={onComplete} className="absolute top-8 right-8 z-50 text-[10px] text-violet-400 border border-violet-500 px-3 py-1 hover:bg-violet-500 transition-all uppercase tracking-widest">
                 Skip Intro
             </button>
         </div>

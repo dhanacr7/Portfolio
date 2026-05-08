@@ -296,14 +296,14 @@ const HUD = ({ step, onComplete }: { step: number, onComplete: () => void }) => 
     if (step === 0) return null; // Just flying
 
     return (
-        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center font-mono z-10 text-cyan-500">
+        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center font-mono z-10 text-violet-400">
             {/* Dynamic Crosshair */}
             <div className="relative w-[300px] h-[300px] flex items-center justify-center">
-                <div className={`absolute border border-cyan-500/50 w-full h-full rounded-full transition-all duration-700 ${isGranted ? 'scale-110 border-green-500' : 'animate-pulse'}`} />
-                <div className={`absolute border-2 border-dashed border-cyan-500/30 w-[80%] h-[80%] rounded-full animate-spin-slow`} />
+                <div className={`absolute border border-violet-500 w-full h-full rounded-full transition-all duration-700 ${isGranted ? 'scale-110 border-green-500' : 'animate-pulse'}`} />
+                <div className={`absolute border-2 border-dashed border-violet-500 w-[80%] h-[80%] rounded-full animate-spin-slow`} />
 
                 {/* Center Text */}
-                <div className="bg-black/80 backdrop-blur-md p-6 border-y border-cyan-500 text-center min-w-[300px]">
+                <div className="bg-black/80 backdrop-blur-md p-6 border-y border-violet-500 text-center min-w-[300px]">
                     <div className="text-xl tracking-widest font-bold mb-2 break-normal whitespace-nowrap overflow-hidden">
                         {text}
                     </div>
@@ -322,8 +322,8 @@ const HUD = ({ step, onComplete }: { step: number, onComplete: () => void }) => 
             </div>
 
             {/* Decorative corners */}
-            <div className="absolute top-10 left-10 w-32 h-32 border-l-2 border-t-2 border-cyan-500/30" />
-            <div className="absolute bottom-10 right-10 w-32 h-32 border-r-2 border-b-2 border-cyan-500/30" />
+            <div className="absolute top-10 left-10 w-32 h-32 border-l-2 border-t-2 border-violet-500" />
+            <div className="absolute bottom-10 right-10 w-32 h-32 border-r-2 border-b-2 border-violet-500" />
         </div>
     );
 };
@@ -409,7 +409,7 @@ const InsideFirewallLoader = ({ onComplete }: { onComplete: () => void }) => {
             {/* Skip Button */}
             <button
                 onClick={onComplete}
-                className="absolute items-center top-6 right-6 z-[60] text-xs font-mono text-cyan-500/50 hover:text-cyan-400 border border-cyan-500/20 px-3 py-1 bg-black/50 backdrop-blur"
+                className="absolute items-center top-6 right-6 z-[60] text-xs font-mono text-violet-400 hover:text-violet-400 border border-violet-500 px-3 py-1 bg-black/50 backdrop-blur"
             >
                 SKIP_SEQ //
             </button>

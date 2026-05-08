@@ -22,7 +22,7 @@ const certificates = [
 export const Certificates = () => {
     return (
         <section id="certificates" className="py-32 relative bg-black overflow-hidden">
-            <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container mx-auto px-4 relative z-10">
@@ -32,16 +32,16 @@ export const Certificates = () => {
                     viewport={{ once: true }}
                     className="mb-20 text-center"
                 >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-cyan-800/30 rounded-full bg-cyan-950/10 backdrop-blur-sm">
-                        <Award className="w-3 h-3 text-cyan-400 animate-pulse" />
-                        <span className="text-[10px] font-mono text-cyan-400 tracking-[0.2em] uppercase">Verified Credentials</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-violet-500/30 rounded-full bg-violet-500/10 backdrop-blur-sm">
+                        <Award className="w-3 h-3 text-violet-400 animate-pulse" />
+                        <span className="text-[10px] font-mono text-violet-400 tracking-[0.2em] uppercase">Verified Credentials</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-                        Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Certificates</span>
+                        Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-600">Certificates</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto font-light text-sm md:text-base">
                         Verified accomplishments and skill validations.
-                        <span className="block mt-2 text-cyan-500/50 font-mono text-xs">/// SECURE_VALIDATION_ACTIVE</span>
+                        <span className="block mt-2 text-violet-400 font-mono text-xs">/// SECURE_VALIDATION_ACTIVE</span>
                     </p>
                 </motion.div>
 
@@ -53,13 +53,13 @@ export const Certificates = () => {
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
                             viewport={{ once: true }}
-                            className="relative group h-[400px] rounded-xl overflow-hidden border border-cyan-900/30 hover:border-cyan-500/50 transition-all duration-300 bg-[#0a0a0f] flex flex-col"
+                            className="relative group h-[400px] rounded-xl overflow-hidden border border-violet-500 hover:border-violet-500 transition-all duration-300 bg-[#0a0a0f] flex flex-col"
                         >
-                            <div className="absolute inset-0 bg-cyan-900/10 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            {/* Overlay removed to keep photos original */}
                             {/* Title Bar */}
-                            <div className="bg-black/80 backdrop-blur-md p-3 border-b border-cyan-900/30 z-20 flex items-center justify-between">
-                                <h3 className="text-cyan-100 text-sm font-semibold truncate pr-2">{cert.title}</h3>
-                                <Award className="w-4 h-4 text-cyan-500 flex-shrink-0" />
+                            <div className="bg-black/80 backdrop-blur-md p-3 border-b border-violet-500 z-20 flex items-center justify-between">
+                                <h3 className="text-violet-400 text-sm font-semibold truncate pr-2">{cert.title}</h3>
+                                <Award className="w-4 h-4 text-violet-400 flex-shrink-0" />
                             </div>
 
                             {/* Content Viewer */}

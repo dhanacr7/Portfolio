@@ -66,7 +66,7 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed inset-0 z-[100] bg-[#0a0a0a] text-amber-500 font-mono overflow-hidden flex flex-col items-center justify-center"
+                className="fixed inset-0 z-[100] bg-[#0a0a0a] text-violet-300 font-mono overflow-hidden flex flex-col items-center justify-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 1 } }}
@@ -92,15 +92,15 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
 
                 {/* --- STAGE 1 & 2: PACKET RECONSTRUCTION --- */}
                 {(stage === "SCATTER" || stage === "RECONSTRUCT") && (
-                    <div className="relative w-full max-w-4xl h-96 border border-amber-900/50 bg-black/80 backdrop-blur-sm p-4 rounded-lg overflow-hidden flex flex-col">
+                    <div className="relative w-full max-w-4xl h-96 border border-violet-300 bg-black/80 backdrop-blur-sm p-4 rounded-lg overflow-hidden flex flex-col">
 
                         {/* Header */}
-                        <div className="flex justify-between items-center border-b border-amber-900/50 pb-2 mb-4">
+                        <div className="flex justify-between items-center border-b border-violet-300 pb-2 mb-4">
                             <div className="flex items-center gap-2">
-                                <FileSearch className="w-4 h-4 text-amber-500" />
-                                <span className="text-xs tracking-widest text-amber-100">FORENSIC_ANALYZER_V9</span>
+                                <FileSearch className="w-4 h-4 text-violet-300" />
+                                <span className="text-xs tracking-widest text-violet-300">FORENSIC_ANALYZER_V9</span>
                             </div>
-                            <div className="text-[10px] text-amber-700">CASE_ID: #884-XJ</div>
+                            <div className="text-[10px] text-violet-300">CASE_ID: #884-XJ</div>
                         </div>
 
                         {/* Hex Grid Content */}
@@ -114,8 +114,8 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                                     animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
                                     transition={{ duration: 1, delay: row * 0.1, type: "spring" }}
                                 >
-                                    <span className="text-amber-800 select-none">0x{generateHex(4)}:</span>
-                                    <span className={stage === "RECONSTRUCT" ? "text-amber-300" : "text-amber-900/50"}>
+                                    <span className="text-violet-300 select-none">0x{generateHex(4)}:</span>
+                                    <span className={stage === "RECONSTRUCT" ? "text-violet-300" : "text-violet-300"}>
                                         {generateHex(8)} {generateHex(8)} {generateHex(8)} {generateHex(8)}
                                     </span>
                                     <span className="text-gray-600 hidden md:inline">| ...data... |</span>
@@ -128,7 +128,7 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                                     key={file}
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
-                                    className="absolute right-4 bg-amber-900/80 text-amber-100 px-3 py-1 rounded border border-amber-500/50 text-xs flex items-center gap-2"
+                                    className="absolute right-4 bg-violet-300/80 text-violet-300 px-3 py-1 rounded border border-violet-300 text-xs flex items-center gap-2"
                                     style={{ top: i * 40 + 20 }}
                                 >
                                     <FileCheck className="w-3 h-3" />
@@ -139,13 +139,13 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
 
                         {/* Footer Progress */}
                         <div className="mt-auto">
-                            <div className="flex justify-between text-[10px] text-amber-500 mb-1">
+                            <div className="flex justify-between text-[10px] text-violet-300 mb-1">
                                 <span>RECONSTRUCTING_DATA_STRUCTURES...</span>
                                 <span>{progress}%</span>
                             </div>
-                            <div className="h-1 w-full bg-amber-900/30">
+                            <div className="h-1 w-full bg-violet-300/30">
                                 <motion.div
-                                    className="h-full bg-amber-500 box-shadow-[0_0_10px_orange]"
+                                    className="h-full bg-violet-300 box-shadow-[0_0_10px_orange]"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${progress}%` }}
                                 />
@@ -163,13 +163,13 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                         exit={{ scale: 1.5, opacity: 0 }}
                     >
                         <div className="mb-8 relative">
-                            <div className="w-24 h-24 border-2 border-amber-500 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
-                                <div className="w-20 h-20 border border-t-transparent border-b-transparent border-amber-300 rounded-full animate-[spin_3s_linear_infinite_reverse]" />
+                            <div className="w-24 h-24 border-2 border-violet-300 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
+                                <div className="w-20 h-20 border border-t-transparent border-b-transparent border-violet-300 rounded-full animate-[spin_3s_linear_infinite_reverse]" />
                             </div>
-                            <Lock className="w-8 h-8 text-amber-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                            <Lock className="w-8 h-8 text-violet-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
                         </div>
-                        <h2 className="text-2xl font-bold text-amber-100 tracking-[0.2em] mb-2">DECRYPTING IDENTITY</h2>
-                        <div className="font-mono text-amber-700 text-sm">
+                        <h2 className="text-2xl font-bold text-violet-300 tracking-[0.2em] mb-2">DECRYPTING IDENTITY</h2>
+                        <div className="font-mono text-violet-300 text-sm">
                             KEY: 0x{generateHex(16)}...
                         </div>
                     </motion.div>
@@ -178,12 +178,12 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                 {/* --- STAGE 4: REVEAL --- */}
                 {stage === "REVEAL" && (
                     <motion.div
-                        className="text-center z-50 p-12 border-y border-amber-500/30 bg-black/90 backdrop-blur-xl w-full max-w-2xl"
+                        className="text-center z-50 p-12 border-y border-violet-300 bg-black/90 backdrop-blur-xl w-full max-w-2xl"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
                         <div className="flex justify-center mb-6">
-                            <Unlock className="w-12 h-12 text-cyan-400" />
+                            <Unlock className="w-12 h-12 text-violet-400" />
                         </div>
 
                         <motion.h1
@@ -195,9 +195,9 @@ const CyberpunkLoader = ({ onComplete }: { onComplete: () => void }) => {
                             DHANAPRIYAN
                         </motion.h1>
 
-                        <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
+                        <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-violet-500 to-transparent mx-auto mb-6" />
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-bold tracking-widest text-amber-500/80 uppercase">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-bold tracking-widest text-violet-300 uppercase">
                             <div className="flex items-center justify-center gap-2">
                                 <Binary className="w-4 h-4" />
                                 <span>Malware Analysis</span>

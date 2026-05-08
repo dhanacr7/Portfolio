@@ -76,26 +76,26 @@ const ProjectCard = ({ project, index, onOpenPhotos }: { project: any, index: nu
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Holographic Background Layer */}
-      <div className={`absolute inset-0 bg-[#0a0a0f] border border-cyan-900/30 rounded-xl transition-all duration-300 ${isHovered ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(0,240,255,0.1)]' : ''}`} />
+      <div className={`absolute inset-0 bg-[#0a0a0f] border border-violet-500 rounded-xl transition-all duration-300 ${isHovered ? 'border-violet-500 shadow-[0_0_30px_rgba(0,240,255,0.1)]' : ''}`} />
 
       {/* Grid Overlay */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay rounded-xl pointer-events-none" />
 
       {/* Corner Decorative Brackets */}
-      <div className={`absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-xl transition-all duration-300 ${isHovered ? 'w-full h-full border-cyan-500/80 rounded-xl' : ''} pointer-events-none`} />
-      <div className={`absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-500/30 rounded-br-xl transition-all duration-300 ${isHovered ? 'opacity-0' : ''} pointer-events-none`} />
+      <div className={`absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-violet-500 rounded-tl-xl transition-all duration-300 ${isHovered ? 'w-full h-full border-violet-500 rounded-xl' : ''} pointer-events-none`} />
+      <div className={`absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-violet-500 rounded-br-xl transition-all duration-300 ${isHovered ? 'opacity-0' : ''} pointer-events-none`} />
 
       {/* Content Container */}
       <div className="relative p-6 h-full flex flex-col z-10">
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
-          <div className="p-3 bg-cyan-950/20 border border-cyan-900/50 rounded-lg group-hover:bg-cyan-500/20 group-hover:border-cyan-400/50 transition-colors">
-            <project.icon className="w-6 h-6 text-cyan-400 group-hover:text-cyan-200" />
+          <div className="p-3 bg-violet-500/10 border border-violet-500/20 rounded-lg group-hover:bg-violet-500/20 group-hover:border-violet-500/50 transition-colors">
+            <project.icon className="w-6 h-6 text-violet-400 group-hover:text-violet-400" />
           </div>
           {/* Status Pill */}
-          <div className="flex items-center gap-2 px-3 py-1 bg-black/50 border border-cyan-900/50 rounded-full">
-            <div className={`w-1.5 h-1.5 rounded-full ${isHovered ? 'bg-cyan-400 animate-pulse' : 'bg-gray-600'}`} />
-            <span className={`text-[10px] font-mono tracking-wider ${isHovered ? 'text-cyan-400' : 'text-gray-500'}`}>
+          <div className="flex items-center gap-2 px-3 py-1 bg-black/50 border border-violet-500 rounded-full">
+            <div className={`w-1.5 h-1.5 rounded-full ${isHovered ? 'bg-violet-500 animate-pulse' : 'bg-gray-600'}`} />
+            <span className={`text-[10px] font-mono tracking-wider ${isHovered ? 'text-violet-400' : 'text-gray-500'}`}>
               {project.status}
             </span>
           </div>
@@ -103,10 +103,10 @@ const ProjectCard = ({ project, index, onOpenPhotos }: { project: any, index: nu
 
         {/* Title & Desc */}
         <div className="mb-auto">
-          <h3 className={`text-xl font-bold mb-2 transition-colors duration-300 ${isHovered ? 'text-cyan-100' : 'text-gray-300'}`}>
+          <h3 className={`text-xl font-bold mb-2 transition-colors duration-300 ${isHovered ? 'text-violet-400' : 'text-gray-300'}`}>
             {project.title}
           </h3>
-          <div className="h-[1px] w-12 bg-cyan-600/30 mb-4 group-hover:w-full transition-all duration-500" />
+          <div className="h-[1px] w-12 bg-violet-500 mb-4 group-hover:w-full transition-all duration-500" />
           <p className="text-sm text-gray-400 leading-relaxed">
             {project.description}
           </p>
@@ -116,7 +116,7 @@ const ProjectCard = ({ project, index, onOpenPhotos }: { project: any, index: nu
         <div className="mt-6 space-y-4">
           <div className="flex flex-wrap gap-2">
             {project.tags.map((tag: string) => (
-              <span key={tag} className="px-2 py-1 text-[10px] font-mono text-cyan-300 bg-cyan-950/30 border border-cyan-900/30 rounded">
+              <span key={tag} className="px-2 py-1 text-[10px] font-mono text-violet-400 bg-violet-500/20 border border-violet-500/30 rounded">
                 {tag}
               </span>
             ))}
@@ -124,12 +124,12 @@ const ProjectCard = ({ project, index, onOpenPhotos }: { project: any, index: nu
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-2 mt-2">
-            <button className={`w-full py-3 flex items-center justify-center gap-2 text-sm font-bold tracking-wider uppercase transition-all duration-300 rounded-lg overflow-hidden relative group/btn border border-cyan-700/50 ${isHovered ? 'bg-cyan-500/10 text-cyan-300' : 'bg-transparent text-gray-500'}`}>
+            <button className={`w-full py-3 flex items-center justify-center gap-2 text-sm font-bold tracking-wider uppercase transition-all duration-300 rounded-lg overflow-hidden relative group/btn border border-violet-500/30 ${isHovered ? 'bg-transparent text-white' : 'bg-transparent text-gray-500'}`}>
               <span className="relative z-10 flex items-center gap-2">
                 <Terminal className="w-4 h-4" />
                 Initialize Project
               </span>
-              <div className="absolute inset-0 bg-cyan-600/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out z-0" />
+              <div className="absolute inset-0 bg-violet-500/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out z-0" />
             </button>
 
             {project.samplePhotos && project.samplePhotos.length > 0 && (
@@ -183,7 +183,7 @@ export const Projects = () => {
   return (
     <section id="projects" className="py-32 relative bg-black overflow-hidden">
       {/* Background Ambience */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
@@ -195,16 +195,16 @@ export const Projects = () => {
           viewport={{ once: true }}
           className="mb-20 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-cyan-800/30 rounded-full bg-cyan-950/10 backdrop-blur-sm">
-            <Globe className="w-3 h-3 text-cyan-400 animate-pulse" />
-            <span className="text-[10px] font-mono text-cyan-400 tracking-[0.2em] uppercase">Global Systems Active</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 border border-violet-500/30 rounded-full bg-violet-500/10 backdrop-blur-sm">
+            <Globe className="w-3 h-3 text-violet-400 animate-pulse" />
+            <span className="text-[10px] font-mono text-violet-400 tracking-[0.2em] uppercase">Global Systems Active</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Operations</span>
+            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-600">Operations</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto font-light text-sm md:text-base">
             Deployed enterprise-grade solutions across web, mobile, and AI sectors.
-            <span className="block mt-2 text-cyan-500/50 font-mono text-xs">/// SECURE_ACCESS_LEVEL_ADMIN</span>
+            <span className="block mt-2 text-violet-400 font-mono text-xs">/// SECURE_ACCESS_LEVEL_ADMIN</span>
           </p>
         </motion.div>
 
@@ -240,13 +240,13 @@ export const Projects = () => {
               <>
                 <button
                   onClick={prevPhoto}
-                  className="absolute left-2 md:left-8 z-50 p-3 bg-black/50 hover:bg-cyan-500/20 text-white rounded-full transition-colors border border-white/10 hover:border-cyan-500/50 backdrop-blur-md shadow-lg"
+                  className="absolute left-2 md:left-8 z-50 p-3 bg-black/50 hover:bg-violet-500 text-white rounded-full transition-colors border border-white/10 hover:border-violet-500 backdrop-blur-md shadow-lg"
                 >
                   <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
                 </button>
                 <button
                   onClick={nextPhoto}
-                  className="absolute right-2 md:right-8 z-50 p-3 bg-black/50 hover:bg-cyan-500/20 text-white rounded-full transition-colors border border-white/10 hover:border-cyan-500/50 backdrop-blur-md shadow-lg"
+                  className="absolute right-2 md:right-8 z-50 p-3 bg-black/50 hover:bg-violet-500 text-white rounded-full transition-colors border border-white/10 hover:border-violet-500 backdrop-blur-md shadow-lg"
                 >
                   <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
                 </button>

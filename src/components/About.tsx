@@ -9,25 +9,25 @@ const highlights = [
     icon: Shield,
     title: 'Cybersecurity Focus',
     description: 'Specializing in secure application development and vulnerability assessment',
-    color: 'text-cyan-400'
+    color: 'text-violet-400'
   },
   {
     icon: Code,
     title: 'Full Stack Expertise',
     description: 'Building end-to-end solutions with modern web technologies',
-    color: 'text-amber-400'
+    color: 'text-violet-300'
   },
   {
     icon: Rocket,
     title: 'Problem Solver',
     description: 'Tackling complex challenges with innovative technical solutions',
-    color: 'text-cyan-400'
+    color: 'text-violet-400'
   },
   {
     icon: Award,
     title: 'Continuous Learner',
     description: 'Always exploring new technologies and security practices',
-    color: 'text-amber-400'
+    color: 'text-violet-300'
   },
 ];
 
@@ -46,14 +46,14 @@ export const About = () => {
           {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
-              About <span className="text-cyan-500">Me</span>
+              About <span className="text-violet-400">Me</span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 to-amber-500 mx-auto" />
+            <div className="w-24 h-1 bg-gradient-to-r from-violet-500 to-violet-300 mx-auto" />
           </div>
 
           {/* Main Bio */}
           <div className="max-w-4xl mx-auto mb-20">
-            <Card className="bg-[#0f0f10] border-l-4 border-l-cyan-500 border-y border-r border-[#1f1f22] p-8 md:p-10 shadow-lg">
+            <Card className="bg-[#0f0f10] border-l-4 border-l-violet-500 border-y border-r border-[#1f1f22] p-8 md:p-10 shadow-lg">
               <p className="text-lg leading-relaxed text-gray-400 mb-6 font-light">
                 I'm a passionate <span className="text-white font-medium">Cybersecurity Enthusiast</span> and{' '}
                 <span className="text-white font-medium">Full Stack Developer</span> with a strong foundation
@@ -77,7 +77,7 @@ export const About = () => {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <div className="h-full p-6 bg-[#0a0a0b] border border-[#1f1f22] hover:border-cyan-500/50 transition-colors group">
+                <div className="h-full p-6 bg-[#0a0a0b] border border-[#1f1f22] hover:border-violet-500 transition-colors group">
                   <div className="mb-4 flex justify-between items-start">
                     <item.icon className={`w-8 h-8 ${item.color} opacity-80 group-hover:opacity-100 transition-opacity`} />
                   </div>

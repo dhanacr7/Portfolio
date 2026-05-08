@@ -10,7 +10,7 @@ const PARTICLE_COUNT = 1500;
 const CONNECTION_DIST = 1.5;
 
 const COLORS = {
-    cyan: '#06b6d4', // Cyan-500
+    cyan: '#7F77DD', // Cyan-500
     blue: '#3b82f6', // Blue-500
     alert: '#ef4444', // Red-500
     success: '#10b981', // Emerald-500
@@ -176,10 +176,10 @@ const StatusBadge = ({ label, value, color, icon: Icon }: any) => (
 );
 
 const ThreatLog = ({ logs }: { logs: string[] }) => (
-    <div className="w-full max-w-sm h-32 overflow-hidden flex flex-col justify-end border-l-2 border-cyan-800/50 pl-3 bg-gradient-to-r from-cyan-950/10 to-transparent">
+    <div className="w-full max-w-sm h-32 overflow-hidden flex flex-col justify-end border-l-2 border-violet-500 pl-3 bg-gradient-to-r from-violet-950/10 to-transparent">
         {logs.map((log, i) => (
-            <div key={i} className="text-[10px] font-mono text-cyan-400/80 mb-1 truncate">
-                <span className="text-cyan-700 mr-2">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
+            <div key={i} className="text-[10px] font-mono text-violet-400 mb-1 truncate">
+                <span className="text-violet-400 mr-2">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
                 {log}
             </div>
         ))}
@@ -243,7 +243,7 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#020205] text-cyan-500 font-mono overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-[#020205] text-violet-400 font-mono overflow-hidden">
 
             {/* 3D Scene */}
             <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
@@ -275,18 +275,18 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
                     {/* Init Text */}
                     {sequence === 1 && (
                         <div className="text-center">
-                            <h2 className="text-2xl font-light tracking-[0.5em] text-cyan-200 animate-pulse">INITIALIZING</h2>
-                            <div className="text-[10px] text-cyan-600 mt-2 tracking-widest">NEURAL DEFENSE MATRIX V4.0</div>
+                            <h2 className="text-2xl font-light tracking-[0.5em] text-violet-400 animate-pulse">INITIALIZING</h2>
+                            <div className="text-[10px] text-violet-400 mt-2 tracking-widest">NEURAL DEFENSE MATRIX V4.0</div>
                         </div>
                     )}
 
                     {/* Scanner */}
                     {sequence === 2 && (
                         <div className="relative">
-                            <Scan className="w-64 h-64 text-cyan-500/20 animate-pulse" />
+                            <Scan className="w-64 h-64 text-violet-400 animate-pulse" />
                             <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                <div className="text-4xl font-bold text-cyan-500">{scanProgress}%</div>
-                                <div className="text-xs text-cyan-700 tracking-widest mt-1">ANALYZING PACKETS</div>
+                                <div className="text-4xl font-bold text-violet-400">{scanProgress}%</div>
+                                <div className="text-xs text-violet-400 tracking-widest mt-1">ANALYZING PACKETS</div>
                             </div>
                         </div>
                     )}
@@ -294,13 +294,13 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
                     {/* Verify Fingerprint */}
                     {sequence === 3 && (
                         <div className="relative">
-                            <div className={`w-32 h-32 border-2 border-cyan-500 rounded-lg flex items-center justify-center overflow-hidden transition-all duration-300 ${isVerified ? 'border-green-500 scale-110' : 'animate-pulse'}`}>
-                                <Fingerprint className={`w-24 h-24 ${isVerified ? 'text-green-500' : 'text-cyan-500'}`} />
+                            <div className={`w-32 h-32 border-2 border-violet-500 rounded-lg flex items-center justify-center overflow-hidden transition-all duration-300 ${isVerified ? 'border-green-500 scale-110' : 'animate-pulse'}`}>
+                                <Fingerprint className={`w-24 h-24 ${isVerified ? 'text-green-500' : 'text-violet-400'}`} />
                                 {/* Scan Line */}
-                                {!isVerified && <div className="absolute top-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_#06b6d4] animate-[scan_1.5s_linear_infinite]" />}
+                                {!isVerified && <div className="absolute top-0 w-full h-1 bg-violet-500 shadow-[0_0_15px_#7F77DD] animate-[scan_1.5s_linear_infinite]" />}
                             </div>
                             <div className="mt-4 text-center">
-                                <div className={`text-xs tracking-[0.3em] font-bold ${isVerified ? 'text-green-500' : 'text-cyan-500'}`}>
+                                <div className={`text-xs tracking-[0.3em] font-bold ${isVerified ? 'text-green-500' : 'text-violet-400'}`}>
                                     {isVerified ? "IDENTITY CONFIRMED" : "VERIFYING BIOMETRICS..."}
                                 </div>
                             </div>
@@ -309,17 +309,17 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
 
                     {/* Final Reveal */}
                     {sequence === 4 && (
-                        <div className="text-center bg-black/90 p-8 border border-cyan-500/30 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in duration-700">
+                        <div className="text-center bg-black/90 p-8 border border-violet-500 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in duration-700">
                             <div className="flex justify-center mb-4">
                                 <CheckCircle2 className="w-12 h-12 text-green-500" />
                             </div>
                             <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-2">DHANAPRIYAN</h1>
-                            <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent my-6" />
-                            <div className="flex flex-col md:flex-row gap-2 md:gap-6 text-xs font-bold text-cyan-400 tracking-[0.2em] uppercase justify-center items-center">
+                            <div className="w-full h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent my-6" />
+                            <div className="flex flex-col md:flex-row gap-2 md:gap-6 text-xs font-bold text-violet-400 tracking-[0.2em] uppercase justify-center items-center">
                                 <span>Security Architect</span>
-                                <span className="hidden md:block w-1 h-1 bg-cyan-600 rounded-full" />
+                                <span className="hidden md:block w-1 h-1 bg-violet-500 rounded-full" />
                                 <span>Red Team</span>
-                                <span className="hidden md:block w-1 h-1 bg-cyan-600 rounded-full" />
+                                <span className="hidden md:block w-1 h-1 bg-violet-500 rounded-full" />
                                 <span>AI Security</span>
                             </div>
                         </div>
@@ -331,7 +331,7 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
                     <ThreatLog logs={logs} />
 
                     <div className="text-right opacity-60">
-                        <div className="flex items-center justify-end gap-2 text-cyan-400 mb-1">
+                        <div className="flex items-center justify-end gap-2 text-violet-400 mb-1">
                             <Activity className="w-3 h-3 animate-pulse" />
                             <span className="text-xs">NET_ACTIVITY</span>
                         </div>
@@ -339,7 +339,7 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
                             {[...Array(10)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="w-1 bg-cyan-600 animate-[bounce_1s_infinite]"
+                                    className="w-1 bg-violet-500 animate-[bounce_1s_infinite]"
                                     style={{ height: `${Math.random() * 100}%`, animationDelay: `${i * 0.1}s` }}
                                 />
                             ))}
@@ -350,7 +350,7 @@ const AIDefenseLoader = ({ onComplete }: { onComplete: () => void }) => {
                 {/* Skip */}
                 <button
                     onClick={onComplete}
-                    className="absolute top-6 right-6 z-[60] bg-black/50 hover:bg-cyan-900/30 text-cyan-600 hover:text-cyan-300 border border-cyan-900 px-3 py-1 text-[10px] tracking-widest transition-all pointer-events-auto"
+                    className="absolute top-6 right-6 z-[60] bg-black/50 hover:bg-violet-500 text-violet-400 hover:text-violet-400 border border-violet-500 px-3 py-1 text-[10px] tracking-widest transition-all pointer-events-auto"
                 >
                     SKIP_SEQUENCE
                 </button>

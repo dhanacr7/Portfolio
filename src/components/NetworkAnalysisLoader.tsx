@@ -142,8 +142,8 @@ const AttackParticles = () => {
 const UIOverlay = ({ logs, phase }: { logs: string[], phase: string }) => {
     return (
         <Html fullscreen className="pointer-events-none">
-            <div className="absolute top-10 left-10 text-xs font-mono text-cyan-500/80">
-                <div className="border-l-2 border-cyan-500 pl-4 mb-4">
+            <div className="absolute top-10 left-10 text-xs font-mono text-violet-400">
+                <div className="border-l-2 border-violet-500 pl-4 mb-4">
                     <h1 className="text-xl font-bold text-white tracking-widest">NET_WATCH // V4.0</h1>
                     <p>REAL-TIME THREAT MONITORING</p>
                 </div>
@@ -154,7 +154,7 @@ const UIOverlay = ({ logs, phase }: { logs: string[], phase: string }) => {
                             key={i}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className={`${log.includes('BLOCKED') ? 'text-green-400' : log.includes('DETECTED') ? 'text-red-500' : 'text-cyan-300'}`}
+                            className={`${log.includes('BLOCKED') ? 'text-green-400' : log.includes('DETECTED') ? 'text-red-500' : 'text-violet-400'}`}
                         >
                             {`> ${log}`}
                         </motion.div>
@@ -170,10 +170,10 @@ const UIOverlay = ({ logs, phase }: { logs: string[], phase: string }) => {
                         transition={{ duration: 1 }}
                         className="text-center"
                     >
-                        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest bg-clip-text text-transparent bg-gradient-to-b from-white to-cyan-400">
+                        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest bg-clip-text text-transparent bg-gradient-to-b from-white to-violet-400">
                             DHANAPRIYAN
                         </h1>
-                        <p className="text-cyan-500 tracking-[0.5em] mt-2 text-sm md:text-base">CYBERSECURITY ENGINEER</p>
+                        <p className="text-violet-400 tracking-[0.5em] mt-2 text-sm md:text-base">CYBERSECURITY ENGINEER</p>
                     </motion.div>
                 </div>
             )}
@@ -260,7 +260,7 @@ const NetworkAnalysisLoader = ({ onComplete }: { onComplete: () => void }) => {
             {/* Skip */}
             <button
                 onClick={onComplete}
-                className="absolute top-5 right-5 z-[60] text-cyan-500 text-xs border border-cyan-500/30 px-3 py-1 hover:bg-cyan-500/10 transition-colors uppercase tracking-widest"
+                className="absolute top-5 right-5 z-[60] text-violet-400 text-xs border border-violet-500 px-3 py-1 hover:bg-violet-500 transition-colors uppercase tracking-widest"
             >
                 Skip Analysis
             </button>

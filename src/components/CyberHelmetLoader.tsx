@@ -166,7 +166,7 @@ const CyberHelmetLoader = ({ onComplete }: { onComplete: () => void }) => {
             {/* Skip */}
             <button
                 onClick={onComplete}
-                className="absolute top-6 right-6 z-[60] text-[10px] uppercase tracking-[0.2em] text-gray-500 hover:text-cyan-400 transition-colors"
+                className="absolute top-6 right-6 z-[60] text-[10px] uppercase tracking-[0.2em] text-gray-500 hover:text-violet-400 transition-colors"
             >
                 Skip Sequence
             </button>
@@ -182,7 +182,7 @@ const CyberHelmetLoader = ({ onComplete }: { onComplete: () => void }) => {
                             exit={{ opacity: 0, y: -20 }}
                             className="absolute bottom-20 text-center"
                         >
-                            <div className="text-cyan-400 text-xs tracking-[0.3em] mb-2">SYSTEM STATUS</div>
+                            <div className="text-violet-400 text-xs tracking-[0.3em] mb-2">SYSTEM STATUS</div>
                             <div className="text-white text-lg font-light tracking-wider">{text}</div>
                         </motion.div>
                     )}
@@ -200,9 +200,9 @@ const CyberHelmetLoader = ({ onComplete }: { onComplete: () => void }) => {
                                 DHANAPRIYAN
                             </h1>
                             <div className="flex items-center justify-center gap-4 mt-4 opacity-50">
-                                <span className="h-[1px] w-12 bg-cyan-500"></span>
-                                <span className="text-xs tracking-[0.3em] text-cyan-400">CYBER DEFENSE</span>
-                                <span className="h-[1px] w-12 bg-cyan-500"></span>
+                                <span className="h-[1px] w-12 bg-violet-500"></span>
+                                <span className="text-xs tracking-[0.3em] text-violet-400">CYBER DEFENSE</span>
+                                <span className="h-[1px] w-12 bg-violet-500"></span>
                             </div>
                         </motion.div>
                     )}

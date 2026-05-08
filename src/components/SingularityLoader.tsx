@@ -357,7 +357,7 @@ const SingularityLoader = ({ onComplete }: { onComplete: () => void }) => {
             <div className="absolute top-8 right-8 z-[60]">
                 <button
                     onClick={onComplete}
-                    className="text-xs uppercase tracking-[0.2em] text-cyan-500/50 hover:text-cyan-400 transition-colors border border-cyan-900/30 px-6 py-2 bg-black/20 backdrop-blur-md"
+                    className="text-xs uppercase tracking-[0.2em] text-violet-400 hover:text-violet-400 transition-colors border border-violet-500 px-6 py-2 bg-black/20 backdrop-blur-md"
                 >
                     Skip
                 </button>

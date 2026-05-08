@@ -19,28 +19,28 @@
     /* Darker Card */
     --card-foreground: 180 100% 90%;
 
-    --primary: 180 100% 50%;
-    /* Cyan #00ffff */
+    --primary: 245 56% 66%;
+    /* Cyan #7F77DD */
     --primary-foreground: 240 10% 3%;
 
-    --secondary: 45 100% 50%;
-    /* Amber #ffbf00 */
+    --secondary: 245 59% 79%;
+    /* Amber #AFA9EC */
     --secondary-foreground: 240 10% 3%;
 
     --muted: 240 10% 15%;
     --muted-foreground: 240 5% 60%;
 
-    --accent: 180 100% 50%;
+    --accent: 245 56% 66%;
     /* Cyan accent */
     --accent-foreground: 240 10% 3%;
 
     --destructive: 0 100% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 180 100% 20%;
+    --border: 245 56% 25%;
     /* Cyan dim border */
     --input: 240 10% 15%;
-    --ring: 180 100% 50%;
+    --ring: 245 56% 66%;
 
     --radius: 0.25rem;
     /* Sharp corners for tactical look */
@@ -68,7 +68,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00ffff;
+    background: #7F77DD;
   }
 }
 
@@ -76,14 +76,14 @@
 
   /* Tactical Border */
   .cyber-border {
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(127, 119, 221, 0.2);
+    box-shadow: 0 0 10px rgba(127, 119, 221, 0.05);
     transition: all 0.3s ease;
   }
 
   .cyber-border:hover {
-    border-color: rgba(0, 255, 255, 0.6);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    border-color: rgba(127, 119, 221, 0.6);
+    box-shadow: 0 0 15px rgba(127, 119, 221, 0.2);
   }
 
   /* Glass Panel - Darker */
@@ -94,26 +94,36 @@
   }
 
   /* Glow Utilities */
-  .glow-cyan {
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  .glow-violet {
+    text-shadow: 0 0 10px rgba(127, 119, 221, 0.5);
   }
 
   .glow-amber {
-    text-shadow: 0 0 10px rgba(255, 191, 0, 0.5);
+    text-shadow: 0 0 10px rgba(175, 169, 236, 0.5);
+  }
+
+  /* Global shadow for headings to add purple shade behind text */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-shadow: 0 0 30px rgba(127, 119, 221, 0.4);
   }
 
   /* Grid Background */
   .cyber-grid {
     background-image:
-      linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(127, 119, 221, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127, 119, 221, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   /* Glitch Text Animation */
   .glitch-text:hover {
     animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-    color: #00ffff;
+    color: #7F77DD;
   }
 
   @keyframes glitch {
@@ -147,7 +157,7 @@
     width: 100%;
     height: 100px;
     z-index: 10;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(127, 119, 221, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
     opacity: 0.1;
     position: absolute;
     bottom: 100%;
