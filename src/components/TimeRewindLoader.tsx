@@ -358,7 +358,7 @@ export default function TimeRewindLoader({ onComplete }: Props) {
                         transition={{ duration: 0.5 }}
                         className="absolute top-[15%] left-1/2 -translate-x-1/2 pointer-events-none"
                     >
-                        <div className="text-[#AFA9EC] font-mono text-sm md:text-base tracking-[0.2em] text-center bg-black/40 px-4 py-2 rounded border border-[#AFA9EC]/30">
+                        <div className="text-[#AFA9EC] font-mono text-xs sm:text-sm md:text-base tracking-[0.1em] md:tracking-[0.2em] text-center bg-black/40 px-3 py-2 md:px-4 rounded border border-[#AFA9EC]/30">
                             SYSTEM CLOUD ACTIVE
                         </div>
                     </motion.div>
@@ -373,7 +373,7 @@ export default function TimeRewindLoader({ onComplete }: Props) {
                         exit={{ opacity: 0, scale: 1.1 }}
                         className="absolute top-[15%] left-1/2 -translate-x-1/2 pointer-events-none w-full px-4"
                     >
-                        <div className="text-[#ef4444] font-mono text-lg md:text-2xl font-bold tracking-[0.1em] text-center animate-pulse drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]">
+                        <div className="text-[#ef4444] font-mono text-sm sm:text-base md:text-xl lg:text-2xl font-bold tracking-normal md:tracking-[0.1em] text-center animate-pulse drop-shadow-[0_0_8px_rgba(239,68,68,0.8)] max-w-[90vw] mx-auto leading-snug">
                             ⚠️ HACKERS ARE TRYING TO STEAL THE DATA! ⚠️
                         </div>
                     </motion.div>
@@ -388,7 +388,7 @@ export default function TimeRewindLoader({ onComplete }: Props) {
                         exit={{ opacity: 0 }}
                         className="absolute bottom-1/4 left-1/2 -translate-x-1/2 pointer-events-none"
                     >
-                        <TextDecoder text="WE ARE SECURED" className="text-[#AFA9EC] font-mono text-[1.25rem] tracking-wider text-center w-max drop-shadow-[0_0_8px_rgba(175,169,236,0.6)]" />
+                        <TextDecoder text="WE ARE SECURED" className="text-[#AFA9EC] font-mono text-sm sm:text-base md:text-[1.25rem] tracking-wider text-center w-full max-w-[90vw] drop-shadow-[0_0_8px_rgba(175,169,236,0.6)]" />
                     </motion.div>
                 )}
             </AnimatePresence>
