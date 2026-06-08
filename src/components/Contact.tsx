@@ -35,12 +35,11 @@ export const Contact = () => {
 
     try {
       const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        project_type: formData.projectType || 'General Inquiry',
+        name: formData.name,
+        email: formData.email,
+        title: formData.projectType || 'General Inquiry',
         message: formData.message,
-        to_name: 'Dhanapriyan',
-        reply_to: formData.email,
+        time: new Date().toLocaleString(),
       };
 
       // Pre-initialize EmailJS
