@@ -47,7 +47,7 @@ export const Contact = () => {
 
       await emailjs.send(
         'service_bg1tpka',
-        'template_2s0zsxy',
+        'template_xf9kya9',
         templateParams
       );
 
