@@ -59,10 +59,8 @@ export const Contact = () => {
         message: ''
       });
 
-      alert("MISSION SUCCESSFUL: Transmission established. Data synchronized with central command.");
     } catch (error) {
       console.error('FAILED...', error);
-      alert("CRITICAL ERROR: Transmission failed. Frequency collision detected. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
