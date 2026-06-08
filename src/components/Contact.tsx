@@ -9,6 +9,7 @@ export const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +29,8 @@ export const Contact = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     const subject = encodeURIComponent(`Project Initiative: ${formData.projectType || 'General Inquiry'}`);
     const body = encodeURIComponent(
       `IDENTIFIED_SENDER: ${formData.name}\n` +
@@ -36,7 +39,13 @@ export const Contact = () => {
       `TRANSMITTED_DATA:\n${formData.message}`
     );
 
-    window.location.href = `mailto:dhanapriyan81@gmail.com?subject=${subject}&body=${body}`;
+    // Using window.open is often more reliable than window.location.href for mailto on mobile
+    window.open(`mailto:dhanapriyan81@gmail.com?subject=${subject}&body=${body}`, '_blank');
+
+    // Reset submitting state after a delay
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 2000);
   };
 
   return (
@@ -179,10 +188,20 @@ export const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-10 py-5 bg-violet-600 hover:bg-violet-500 text-white font-bold tracking-[0.2em] uppercase rounded-xl transition-all shadow-[0_0_30px_rgba(139,92,246,0.1)] active:scale-95 flex items-center justify-center gap-3"
+                  disabled={isSubmitting}
+                  className={`w-full md:w-auto px-10 py-5 ${isSubmitting ? 'bg-green-600' : 'bg-violet-600 hover:bg-violet-500'} text-white font-bold tracking-[0.2em] uppercase rounded-xl transition-all shadow-[0_0_30px_rgba(139,92,246,0.1)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70`}
                 >
-                  <Send className="w-5 h-5" />
-                  Establish Link
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Link Initiated
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Establish Link
+                    </>
+                  )}
                 </button>
               </form>
             </div>
