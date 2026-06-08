@@ -42,11 +42,13 @@ export const Contact = () => {
         to_name: 'Dhanapriyan',
       };
 
+      // Pre-initialize EmailJS
+      emailjs.init('Pc_1Vrtm3KnfEjqAy');
+
       await emailjs.send(
         'service_bg1tpka',
         'template_2s0zsxy',
-        templateParams,
-        'Pc_1Vrtm3KnfEjqAy'
+        templateParams
       );
 
       // Reset form
@@ -58,7 +60,6 @@ export const Contact = () => {
       });
 
       alert("MISSION SUCCESSFUL: Transmission established. Data synchronized with central command.");
-      // If you have a toast system, use it here: toast.success("Transmission successful")
     } catch (error) {
       console.error('FAILED...', error);
       alert("CRITICAL ERROR: Transmission failed. Frequency collision detected. Please try again.");
