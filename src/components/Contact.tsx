@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import { Mail, Github, Linkedin, Terminal, Send, Phone, MapPin, Code, Shield, Cpu, ChevronRight, MessageSquare, User, Globe, Laptop } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import emailjs from '@emailjs/browser';
+import { toast } from 'sonner'; // Assuming sonner is used for notifications
 
 export const Contact = () => {
   const ref = useRef(null);
@@ -22,7 +24,7 @@ export const Contact = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleEstablishLink = (e: React.FormEvent) => {
+  const handleEstablishLink = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
       alert("Please fill in the identification and transmission data.");
@@ -31,21 +33,38 @@ export const Contact = () => {
 
     setIsSubmitting(true);
 
-    const subject = encodeURIComponent(`Project Initiative: ${formData.projectType || 'General Inquiry'}`);
-    const body = encodeURIComponent(
-      `IDENTIFIED_SENDER: ${formData.name}\n` +
-      `COMMUNICATION_ADDRESS: ${formData.email}\n` +
-      `INITIATIVE_TYPE: ${formData.projectType || 'N/A'}\n\n` +
-      `TRANSMITTED_DATA:\n${formData.message}`
-    );
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        project_type: formData.projectType || 'General Inquiry',
+        message: formData.message,
+        to_name: 'Dhanapriyan',
+      };
 
-    // Using window.open is often more reliable than window.location.href for mailto on mobile
-    window.open(`mailto:dhanapriyan81@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      await emailjs.send(
+        'service_bg1tpka',
+        'template_2s0zsxy',
+        templateParams,
+        'Pc_1Vrtm3KnfEjqAy'
+      );
 
-    // Reset submitting state after a delay
-    setTimeout(() => {
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        projectType: '',
+        message: ''
+      });
+
+      alert("MISSION SUCCESSFUL: Transmission established. Data synchronized with central command.");
+      // If you have a toast system, use it here: toast.success("Transmission successful")
+    } catch (error) {
+      console.error('FAILED...', error);
+      alert("CRITICAL ERROR: Transmission failed. Frequency collision detected. Please try again.");
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   return (
