@@ -1,22 +1,40 @@
 import { motion } from 'framer-motion';
-import { Award } from 'lucide-react';
+import { Award, Shield, Code, ChevronRight, ExternalLink } from 'lucide-react';
 
-const certificates = [
-    { file: 'CTF event star performer.jpg', title: 'CTF Event Star Performer' },
-    { file: 'DHANAPRIYAN C++ CERTIFICATE.jpg', title: 'C++ Certificate' },
-    { file: 'DHANAPRIYAN Cpp practice cerrtifiate.jpg', title: 'C++ Practice Certificate' },
-    { file: 'DHANAPRIYAN HTML CERTIFICATE.jpg', title: 'HTML Certificate' },
-    { file: 'FOUNDATIONS OF CYBERSECURITY.jpg', title: 'Foundations of Cybersecurity' },
-    { file: 'GOOGLE CYBERSECURITY 2.jpg', title: 'Google Cybersecurity 2' },
-    { file: 'GOOGLE CYBERSECURITY 3.jpg', title: 'Google Cybersecurity 3' },
-    { file: 'HTML AND CSS CERRTIFICATE.jpg', title: 'HTML & CSS Certificate' },
-    { file: 'IBM Agentic AI Workshop.jpg', title: 'IBM Agentic AI Workshop' },
-    { file: 'JAVA SCRIPT CERTIFICATE.jpg', title: 'JavaScript Certificate' },
-    { file: 'NETWORKS BASICS.jpg', title: 'Networks Basics' },
-    { file: 'NEW YORK UNIVERSITY CYBER ATTACK COUNTERMEASURES.jpg', title: 'NYU Cyber Attack Countermeasures' },
-    { file: 'NEW YORK UNIVERSITY CYBER ATTACKS.jpg', title: 'NYU Cyber Attacks' },
-    { file: 'OS CERTIFICATE.jpg', title: 'OS Certificate' },
-    { file: 'PSG TECH KRIYA COMP.jpg', title: 'PSG Tech KRIYA' }
+const certificateCategories = [
+    {
+        name: 'Cybersecurity',
+        icon: Shield,
+        items: [
+            { file: 'FOUNDATIONS OF CYBERSECURITY.jpg', title: 'Foundations of Cybersecurity' },
+            { file: 'GOOGLE CYBERSECURITY 2.jpg', title: 'Google Cybersecurity 2' },
+            { file: 'GOOGLE CYBERSECURITY 3.jpg', title: 'Google Cybersecurity 3' },
+            { file: 'NEW YORK UNIVERSITY CYBER ATTACK COUNTERMEASURES.jpg', title: 'NYU Cyber Attack Countermeasures' },
+            { file: 'NEW YORK UNIVERSITY CYBER ATTACKS.jpg', title: 'NYU Cyber Attacks' },
+            { file: 'NETWORKS BASICS.jpg', title: 'Networks Basics' },
+            { file: 'CTF event star performer.jpg', title: 'CTF Event Star Performer' }
+        ]
+    },
+    {
+        name: 'Software Development',
+        icon: Code,
+        items: [
+            { file: 'DHANAPRIYAN C++ CERTIFICATE.jpg', title: 'C++ Mastery' },
+            { file: 'DHANAPRIYAN Cpp practice cerrtifiate.jpg', title: 'C++ Applications' },
+            { file: 'HTML AND CSS CERRTIFICATE.jpg', title: 'HTML & CSS Essentials' },
+            { file: 'DHANAPRIYAN HTML CERTIFICATE.jpg', title: 'HTML Foundations' },
+            { file: 'JAVA SCRIPT CERTIFICATE.jpg', title: 'JavaScript Advanced' },
+            { file: 'OS CERTIFICATE.jpg', title: 'Operating Systems' }
+        ]
+    },
+    {
+        name: 'Workshops & Events',
+        icon: Award,
+        items: [
+            { file: 'IBM Agentic AI Workshop.jpg', title: 'IBM Agentic AI' },
+            { file: 'PSG TECH KRIYA COMP.jpg', title: 'PSG Tech KRIYA' }
+        ]
+    }
 ];
 
 export const Certificates = () => {
@@ -45,32 +63,52 @@ export const Certificates = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                    {certificates.map((cert, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
-                            viewport={{ once: true }}
-                            className="relative group h-[400px] rounded-xl overflow-hidden border border-violet-500 hover:border-violet-500 transition-all duration-300 bg-[#0a0a0f] flex flex-col"
-                        >
-                            {/* Overlay removed to keep photos original */}
-                            {/* Title Bar */}
-                            <div className="bg-black/80 backdrop-blur-md p-3 border-b border-violet-500 z-20 flex items-center justify-between">
-                                <h3 className="text-violet-400 text-sm font-semibold truncate pr-2">{cert.title}</h3>
-                                <Award className="w-4 h-4 text-violet-400 flex-shrink-0" />
+                <div className="space-y-16 max-w-7xl mx-auto">
+                    {certificateCategories.map((category, catIndex) => (
+                        <div key={category.name}>
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="p-2 bg-violet-500/10 border border-violet-500/20 rounded-lg">
+                                    <category.icon className="w-5 h-5 text-violet-400" />
+                                </div>
+                                <h3 className="text-xl font-bold font-mono text-violet-300 tracking-wider">
+                                    {category.name.toUpperCase()}
+                                </h3>
+                                <div className="h-px bg-gradient-to-r from-violet-500/30 to-transparent flex-1" />
                             </div>
 
-                            {/* Content Viewer */}
-                            <div className="flex-1 relative bg-white/5 overflow-hidden">
-                                <img
-                                    src={`/certificates/${cert.file}`}
-                                    alt={cert.title}
-                                    className="w-full h-full object-contain p-2"
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {category.items.map((cert, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.4, delay: (index % 3) * 0.1 }}
+                                        viewport={{ once: true }}
+                                        className="relative group bg-[#0a0a0f] border border-gray-800 hover:border-violet-500/50 rounded-xl overflow-hidden transition-all duration-500 hover:translate-y-[-4px]"
+                                    >
+                                        {/* Certificate Image View */}
+                                        <div className="aspect-[4/3] relative bg-white/5 overflow-hidden group-hover:bg-white/10 transition-colors">
+                                            <img
+                                                src={`/certificates/${cert.file}`}
+                                                alt={cert.title}
+                                                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                                            />
+                                            <div className="absolute inset-0 bg-violet-900/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                        </div>
+
+                                        {/* Footer / Info */}
+                                        <div className="p-4 border-t border-gray-800 bg-black/40 backdrop-blur-sm group-hover:bg-violet-950/20 transition-colors flex items-center justify-between">
+                                            <span className="text-xs font-medium text-gray-400 group-hover:text-white transition-colors">
+                                                {cert.title}
+                                            </span>
+                                            <div className="p-1.5 bg-gray-900 rounded group-hover:bg-violet-600 transition-all">
+                                                <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-white" />
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>

@@ -53,23 +53,27 @@ export const About = () => {
 
           {/* Main Bio */}
           <div className="max-w-4xl mx-auto mb-20">
-            <Card className="bg-[#0f0f10] border-l-4 border-l-violet-500 border-y border-r border-[#1f1f22] p-8 md:p-10 shadow-lg">
-              <p className="text-lg leading-relaxed text-gray-400 mb-6 font-light">
-                I'm a passionate <span className="text-white font-medium">Cybersecurity Enthusiast</span> and{' '}
-                <span className="text-white font-medium">Full Stack Developer</span> with a strong foundation
-                in building secure, scalable web applications. My journey in tech has been driven by curiosity
-                and a desire to create solutions that make a difference.
-              </p>
-              <p className="text-lg leading-relaxed text-gray-400 font-light">
-                With expertise in multiple programming languages and frameworks, I specialize in developing
-                robust applications while maintaining a security-first mindset. I'm constantly exploring new
-                technologies, from AI model training to advanced web development techniques.
-              </p>
-            </Card>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-[#0a0a0b] border border-gray-800 p-8 md:p-12 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="absolute top-0 left-0 w-2 h-full bg-violet-600" />
+                <p className="text-lg md:text-xl leading-relaxed text-gray-300 mb-8 font-light italic">
+                  "Engineering secure, resilient digital ecosystems where security meets innovation."
+                </p>
+                <div className="space-y-6 text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                  <p>
+                    I am a <span className="text-white font-medium">Cybersecurity Specialist</span> and <span className="text-white font-medium">Full-Stack Developer</span> dedicated to crafting high-performance applications with integrated security at their core. My approach combines deep technical expertise with a proactive defensive mindset.
+                  </p>
+                  <p>
+                    From developing sophisticated <span className="text-violet-400">Java/Spring Boot</span> backends to architecting intelligent <span className="text-blue-400">AI-driven</span> solutions, I focus on building systems that are not only functional but also inherently robust against modern threats.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {highlights.map((item, index) => (
               <motion.div
                 key={item.title}
@@ -77,12 +81,15 @@ export const About = () => {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <div className="h-full p-6 bg-[#0a0a0b] border border-[#1f1f22] hover:border-violet-500 transition-colors group">
-                  <div className="mb-4 flex justify-between items-start">
-                    <item.icon className={`w-8 h-8 ${item.color} opacity-80 group-hover:opacity-100 transition-opacity`} />
+                <div className="h-full p-8 bg-[#0a0a0b] border border-gray-800 rounded-xl hover:border-violet-500/50 transition-all duration-500 group relative overflow-hidden">
+                  <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-violet-600/10 to-transparent -mr-12 -mt-12 rounded-full blur-2xl group-hover:bg-violet-600/20 transition-all duration-500`} />
+                  <div className="mb-6 relative">
+                    <div className="p-3 bg-violet-500/5 border border-violet-500/20 rounded-lg inline-block group-hover:scale-110 transition-transform duration-500">
+                      <item.icon className={`w-6 h-6 ${item.color}`} />
+                    </div>
                   </div>
-                  <h3 className="text-sm font-bold text-gray-200 mb-2 tracking-wider">{item.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
+                  <h3 className="text-sm font-bold text-white mb-3 tracking-wider font-mono">{item.title.toUpperCase()}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed font-light">{item.description}</p>
                 </div>
               </motion.div>
             ))}

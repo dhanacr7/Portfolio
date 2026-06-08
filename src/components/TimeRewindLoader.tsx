@@ -47,19 +47,7 @@ const CentralCore = () => {
                 </mesh>
             </mesh>
 
-            {/* The text hovering clearly above the giant core */}
-            <Text
-                position={[0, 2.5, 0]}
-                fontSize={0.8}
-                color="#ffffff"
-                anchorX="center"
-                anchorY="middle"
-                outlineWidth={0.03}
-                outlineColor="#7F77DD"
-                depthOffset={-1}
-            >
-                DATABASE
-            </Text>
+            {/* DATABASE text removed as per request */}
         </group>
     );
 };
@@ -70,9 +58,32 @@ const AttackSpikes = () => {
     const animState = useRef({ progress: 0, opacity: 1 });
 
     const geometry = useMemo(() => {
-        const geo = new THREE.ConeGeometry(0.3, 5, 8); // Long sharp missiles
-        geo.rotateX(-Math.PI / 2); // Natively points the tip along the -Z axis (towards target when lookAt is called)
-        return geo;
+        const shaftGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.2, 8);
+        shaftGeo.rotateX(Math.PI / 2);
+        shaftGeo.translate(0, 0, 0.6); // Move shaft back so tip is at origin
+
+        const headGeo = new THREE.ConeGeometry(0.15, 0.5, 8);
+        headGeo.rotateX(-Math.PI / 2);
+        headGeo.translate(0, 0, -0.25); // Tip at origin
+
+        const merged = new THREE.BufferGeometry();
+
+        // Manual merge of attributes
+        const shaftPos = shaftGeo.attributes.position.array as Float32Array;
+        const headPos = headGeo.attributes.position.array as Float32Array;
+        const positions = new Float32Array(shaftPos.length + headPos.length);
+        positions.set(shaftPos);
+        positions.set(headPos, shaftPos.length);
+        merged.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const shaftNorm = shaftGeo.attributes.normal.array as Float32Array;
+        const headNorm = headGeo.attributes.normal.array as Float32Array;
+        const normals = new Float32Array(shaftNorm.length + headNorm.length);
+        normals.set(shaftNorm);
+        normals.set(headNorm, shaftNorm.length);
+        merged.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+
+        return merged;
     }, []);
 
     const initialData = useMemo(() => {
@@ -374,7 +385,7 @@ export default function TimeRewindLoader({ onComplete }: Props) {
                         className="absolute top-[15%] left-1/2 -translate-x-1/2 pointer-events-none w-full px-4"
                     >
                         <div className="text-[#ef4444] font-mono text-sm sm:text-base md:text-xl lg:text-2xl font-bold tracking-normal md:tracking-[0.1em] text-center animate-pulse drop-shadow-[0_0_8px_rgba(239,68,68,0.8)] max-w-[90vw] mx-auto leading-snug">
-                            ⚠️ HACKERS ARE TRYING TO STEAL THE DATA! ⚠️
+                            {/* Threat message removed as per request */}
                         </div>
                     </motion.div>
                 )}

@@ -46,10 +46,12 @@ export const Navigation = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "glass-effect shadow-lg" : ""
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? "bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-2xl py-2"
+          : "bg-transparent py-4"
         }`}
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* LOGO (FIXED SIZE) */}
           <motion.a

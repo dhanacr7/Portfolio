@@ -1,43 +1,74 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Code, Database, Cpu, Shield, Lock, Terminal } from 'lucide-react';
+import { Code, Database, Cpu, Shield, Lock, Terminal, Layout, Palette, FileJson, Smartphone, Laptop, Zap, Globe, FileCode, Coffee, Atom, HardDrive, Server, Layers, ShieldAlert, Search } from 'lucide-react';
 
 const skillCategories = [
   {
     category: 'Frontend Development',
-    icon: Code,
+    icon: Layout,
     description: 'I build responsive and modern UIs using HTML, CSS, JavaScript, Flutter, and React.js. I focus on clean design and seamless user experiences.',
-    skills: ['HTML', 'CSS', 'JavaScript', 'Flutter', 'React.js'],
-    accent: 'border-violet-500 text-violet-400'
+    skills: [
+      { name: 'HTML', icon: Globe },
+      { name: 'CSS', icon: Palette },
+      { name: 'JavaScript', icon: FileCode },
+      { name: 'Flutter', icon: Smartphone },
+      { name: 'React.js', icon: Atom }
+    ],
+    accent: 'border-cyan-500 text-cyan-400',
+    bgColor: 'from-cyan-500/5 to-transparent'
   },
   {
     category: 'Backend Development',
-    icon: Cpu,
+    icon: Server,
     description: 'I work with Spring Boot (Java) and the MERN stack (Node.js + Express.js) to develop secure, scalable, and well-structured backend systems.',
-    skills: ['Java', 'Spring Boot', 'Node.js', 'Express.js', 'MERN Stack'],
-    accent: 'border-violet-300 text-violet-300'
+    skills: [
+      { name: 'Java', icon: Coffee },
+      { name: 'Spring Boot', icon: Zap },
+      { name: 'Node.js', icon: Cpu },
+      { name: 'Express.js', icon: Terminal },
+      { name: 'MERN Stack', icon: Layers }
+    ],
+    accent: 'border-violet-500 text-violet-400',
+    bgColor: 'from-violet-500/5 to-transparent'
   },
   {
     category: 'Databases',
     icon: Database,
     description: 'I manage relational and non-relational databases efficiently using MySQL, PostgreSQL, and MongoDB to ensure data integrity.',
-    skills: ['MySQL', 'PostgreSQL', 'MongoDB'],
-    accent: 'border-blue-500/50 text-blue-400'
+    skills: [
+      { name: 'MySQL', icon: Database },
+      { name: 'PostgreSQL', icon: HardDrive },
+      { name: 'MongoDB', icon: Database }
+    ],
+    accent: 'border-blue-500 text-blue-400',
+    bgColor: 'from-blue-500/5 to-transparent'
   },
   {
     category: 'Cybersecurity',
-    icon: Lock,
+    icon: Shield,
     description: 'Blue Team Specialist focused on defensive security operations, UTM, Firewall configuration, and threat detection.',
-    skills: ['Blue Team Operations', 'UTM Specialist', 'Firewall Configuration', 'Network Security', 'Threat Detection'],
-    accent: 'border-green-500/50 text-green-400'
+    skills: [
+      { name: 'Blue Team', icon: Shield },
+      { name: 'UTM Specialist', icon: Lock },
+      { name: 'Firewall', icon: ShieldAlert },
+      { name: 'Network Sec', icon: Globe },
+      { name: 'Threat Detection', icon: Search }
+    ],
+    accent: 'border-green-500 text-green-400',
+    bgColor: 'from-green-500/5 to-transparent'
   },
   {
-    category: 'Programming Languages',
+    category: 'Programming',
     icon: Terminal,
     description: 'I use C++ for problem-solving/DSA, Java for development, and Python for cybersecurity automation and AI.',
-    skills: ['C++', 'Java', 'Python'],
-    accent: 'border-purple-500/50 text-purple-400'
+    skills: [
+      { name: 'C++', icon: Code },
+      { name: 'Java', icon: Coffee },
+      { name: 'Python', icon: FileJson }
+    ],
+    accent: 'border-orange-500 text-orange-400',
+    bgColor: 'from-orange-500/5 to-transparent'
   },
 ];
 
@@ -71,32 +102,36 @@ export const Skills = () => {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <div className={`h-full bg-[#0a0a0b] p-6 border ${cat.accent} border-opacity-30 hover:border-opacity-80 transition-all hover:bg-[#0f0f12]`}>
+                <div className={`group relative h-full bg-[#0a0a0b] p-6 border ${cat.accent} border-opacity-20 hover:border-opacity-100 transition-all duration-500 rounded-xl overflow-hidden`}>
+                  {/* Subtle Gradient Background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
                   {/* Category Header */}
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className={`p-3 bg-black border ${cat.accent} border-opacity-40 rounded`}>
+                  <div className="relative flex items-center gap-4 mb-6 z-10">
+                    <div className={`p-3 bg-black border ${cat.accent} border-opacity-30 rounded-lg group-hover:scale-110 transition-transform duration-500`}>
                       <cat.icon className={`w-6 h-6 ${cat.accent.split(" ")[1]}`} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-gray-200">{cat.category}</h3>
-                      <div className="text-[10px] text-gray-600 font-mono tracking-wider">MODULE_0{index + 1}</div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-violet-400 transition-colors uppercase tracking-tight">{cat.category}</h3>
+                      <div className="text-[10px] text-gray-500 font-mono tracking-widest">MODULE_0{index + 1}</div>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-500 mb-6 leading-relaxed border-l-2 border-gray-800 pl-4">
+                  <p className="relative text-sm text-gray-400 mb-8 leading-relaxed font-light z-10">
                     {cat.description}
                   </p>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
+                  {/* Skills Grid */}
+                  <div className="relative flex flex-wrap gap-3 z-10">
                     {cat.skills.map(skill => (
-                      <span
-                        key={skill}
-                        className="text-xs font-mono px-2 py-1 bg-black border border-gray-800 text-gray-400 hover:text-white hover:border-gray-600 transition-colors"
+                      <div
+                        key={skill.name}
+                        className="flex items-center gap-2 text-xs font-mono px-3 py-1.5 bg-black/40 border border-gray-800 text-gray-400 rounded-md hover:text-white hover:border-gray-500 hover:bg-black transition-all cursor-default group/skill"
                       >
-                        [ {skill} ]
-                      </span>
+                        <skill.icon className="w-3.5 h-3.5 text-gray-500 group-hover/skill:text-violet-400 transition-colors" />
+                        <span>{skill.name}</span>
+                      </div>
                     ))}
                   </div>
                 </div>

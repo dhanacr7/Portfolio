@@ -26,13 +26,13 @@ export const Hero = () => {
             transition={{ delay: 0.2 }}
             className="mb-8 flex justify-center"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-violet-500/30 bg-violet-500/10 backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
-              </span>
-              <span className="text-xs font-mono text-violet-400 tracking-widest uppercase">
-                System Online // Welcome
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 backdrop-blur-xl shadow-[0_0_20px_rgba(139,92,246,0.1)]">
+              <div className="relative flex h-2 w-2">
+                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-500 opacity-40"></div>
+                <div className="relative inline-flex rounded-full h-2 w-2 bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,1)]"></div>
+              </div>
+              <span className="text-[10px] font-mono text-violet-400/90 tracking-[0.3em] uppercase">
+                System Active // Deployment Sequence
               </span>
             </div>
           </motion.div>
@@ -92,11 +92,11 @@ export const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light"
+            className="text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light text-base md:text-lg"
           >
-            Crafting secure, scalable solutions with modern technologies.
-            Passionate about <span className="text-white">cybersecurity</span> and building innovative web applications
-            that make an impact.
+            Architecting <span className="text-white font-medium">secure digital infrastructure</span> and
+            engineering <span className="text-white font-medium">high-performance full-stack systems</span>
+            with a commitment to technological excellence.
           </motion.p>
 
           {/* 🔹 Comms Links */}
