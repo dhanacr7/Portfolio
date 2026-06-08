@@ -40,6 +40,7 @@ export const Contact = () => {
         project_type: formData.projectType || 'General Inquiry',
         message: formData.message,
         to_name: 'Dhanapriyan',
+        reply_to: formData.email,
       };
 
       // Pre-initialize EmailJS
